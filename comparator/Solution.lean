@@ -3,9 +3,13 @@ Copyright (c) 2026 Remy Degenne. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Remy Degenne
 -/
--- One import per file proving a headline result of formalization.yaml, for instance
--- `import Garivier2016Optimal.GK2016.Theorem1`. Until then, the library's root.
-import Garivier2016Optimal
+import Garivier2016Optimal.GK2016.Theorem1
+import Garivier2016Optimal.GK2016.Theorem5
+import Garivier2016Optimal.GK2016.Proposition6
+import Garivier2016Optimal.GK2016.Theorem10
+import Garivier2016Optimal.GK2016.Proposition12
+import Garivier2016Optimal.GK2016.Proposition13
+import Garivier2016Optimal.GK2016.Theorem14
 
 /-! # Comparator solution module
 

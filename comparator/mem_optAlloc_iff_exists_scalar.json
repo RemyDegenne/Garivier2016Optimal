@@ -1,0 +1,12 @@
+{
+    "challenge_module": "Challenge_mem_optAlloc_iff_exists_scalar",
+    "solution_module": "Solution",
+    "theorem_names": [
+        "Garivier2016Optimal.mem_optAlloc_iff_exists_scalar"
+    ],
+    "permitted_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+    ]
+}

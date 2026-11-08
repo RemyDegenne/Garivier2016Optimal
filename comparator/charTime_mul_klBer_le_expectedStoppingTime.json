@@ -1,0 +1,12 @@
+{
+    "challenge_module": "Challenge_charTime_mul_klBer_le_expectedStoppingTime",
+    "solution_module": "Solution",
+    "theorem_names": [
+        "Garivier2016Optimal.charTime_mul_klBer_le_expectedStoppingTime"
+    ],
+    "permitted_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+    ]
+}

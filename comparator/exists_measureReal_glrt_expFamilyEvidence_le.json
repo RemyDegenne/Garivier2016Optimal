@@ -1,0 +1,12 @@
+{
+    "challenge_module": "Challenge_exists_measureReal_glrt_expFamilyEvidence_le",
+    "solution_module": "Solution",
+    "theorem_names": [
+        "Garivier2016Optimal.exists_measureReal_glrt_expFamilyEvidence_le"
+    ],
+    "permitted_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+    ]
+}

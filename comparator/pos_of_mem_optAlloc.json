@@ -1,0 +1,12 @@
+{
+    "challenge_module": "Challenge_pos_of_mem_optAlloc",
+    "solution_module": "Solution",
+    "theorem_names": [
+        "Garivier2016Optimal.pos_of_mem_optAlloc"
+    ],
+    "permitted_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+    ]
+}

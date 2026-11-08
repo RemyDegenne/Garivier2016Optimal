@@ -1,0 +1,12 @@
+{
+    "challenge_module": "Challenge_measureReal_glrt_bernoulli_le",
+    "solution_module": "Solution",
+    "theorem_names": [
+        "Garivier2016Optimal.measureReal_glrt_bernoulli_le"
+    ],
+    "permitted_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+    ]
+}

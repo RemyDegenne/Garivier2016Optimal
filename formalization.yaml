@@ -61,7 +61,8 @@ status:
     Bernoulli arms), Proposition 12 (the deviational threshold), Proposition 13 (the almost sure
     upper bound) and Theorem 14 (asymptotic optimality of Track-and-Stop in expectation, with
     D-tracking and with C-tracking). The statements were checked against the paper on 2026-11-08,
-    which corrected Proposition 12 (erratum E2). The lemmas of the paper that LMLExplore proves
+    which corrected Proposition 12 (erratum E2), and the comparator challenges are set up in
+    comparator/. The lemmas of the paper that LMLExplore proves
     (Lemmas 3, 4, 7, 8, 15, 17 and 19, Proposition 9) are cited in the blueprint.
   sorry_count: 11
   sorry_in_definitions: 0

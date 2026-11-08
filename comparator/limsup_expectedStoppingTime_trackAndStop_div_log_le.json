@@ -1,0 +1,12 @@
+{
+    "challenge_module": "Challenge_limsup_expectedStoppingTime_trackAndStop_div_log_le",
+    "solution_module": "Solution",
+    "theorem_names": [
+        "Garivier2016Optimal.limsup_expectedStoppingTime_trackAndStop_div_log_le"
+    ],
+    "permitted_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+    ]
+}

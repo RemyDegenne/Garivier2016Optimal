@@ -39,4 +39,15 @@ leanOptions = { weak.linter.mathlibStandardSet = false, weak.linter.style.header
 globs = [
   "Comparator",
   "Solution",
+  "Challenge_charTime_mul_klBer_le_expectedStoppingTime",
+  "Challenge_eventually_mul_log_le_expectedStoppingTime",
+  "Challenge_mem_optAlloc_iff_exists_scalar",
+  "Challenge_pos_of_mem_optAlloc",
+  "Challenge_continuousAt_of_mem_optAlloc",
+  "Challenge_le_of_mem_optAlloc_of_le",
+  "Challenge_measureReal_glrt_bernoulli_le",
+  "Challenge_exists_measureReal_glrt_expFamilyEvidence_le",
+  "Challenge_stoppingTime_glrt_ne_top_and_limsup_le",
+  "Challenge_limsup_expectedStoppingTime_trackAndStop_div_log_le",
+  "Challenge_limsup_expectedStoppingTime_cTrackAndStop_div_log_le",
 ]

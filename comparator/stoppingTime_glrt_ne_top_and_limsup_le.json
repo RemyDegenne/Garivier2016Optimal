@@ -1,0 +1,12 @@
+{
+    "challenge_module": "Challenge_stoppingTime_glrt_ne_top_and_limsup_le",
+    "solution_module": "Solution",
+    "theorem_names": [
+        "Garivier2016Optimal.stoppingTime_glrt_ne_top_and_limsup_le"
+    ],
+    "permitted_axioms": [
+        "propext",
+        "Quot.sound",
+        "Classical.choice"
+    ]
+}
