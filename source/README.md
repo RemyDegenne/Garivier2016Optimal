@@ -1,2 +1,2 @@
-Put the paper here: its arXiv or camera-ready TeX sources, or its PDF. Say which revision it is
-(`arXiv:2501.01234v2`): the citations `[GK16, Theorem 1]` and the errata use its numbering.
+The paper: `arXiv-1602.04589v2/`, the arXiv sources of revision v2 (1 June 2016), the COLT 2016
+version. The citations `[GK16, Theorem 1]` and the errata use its numbering.

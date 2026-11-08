@@ -2,7 +2,7 @@
 usemathjax: true
 ---
 
-Lean 4 formalization of the paper *<title of the paper>* (<authors>, <venue, year>), on top of
+Lean 4 formalization of the paper *Optimal Best Arm Identification with Fixed Confidence* (Garivier and Kaufmann, COLT 2016), on top of
 [LMLExplore](https://github.com/LeanMachineLearning/LMLExplore).
 
 * [Blueprint]({{ site.url }}/blueprint/)

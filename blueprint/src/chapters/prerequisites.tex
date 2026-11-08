@@ -1,5 +1,51 @@
 \chapter{Prerequisites}
 \label{chap:prerequisites}
 
-The library-shaped material the paper needs and that LMLExplore, LML, Tau Ceti and Mathlib do not
-provide, at the generality of the literature.
+The library-shaped results that the paper needs and that LMLExplore, LML, Tau Ceti and Mathlib do
+not provide yet. Their Lean code goes to the library's \texttt{ForLMLExplore/} folder, and
+\texttt{PAPER\_ROADMAP.md} says where each goes in LMLExplore.
+
+\begin{theorem}
+  \label{prereq:scalar}
+  For arms in an exponential family and a vector of means with unique best arm $a$, the optimal
+  allocation is $x / \sum_c x_c$, with $x_a = 1$ and $x_b = g_b^{-1}(y^*)$ for $b \ne a$, where
+  $g_b(x) = d(\mu_a, m_b(x)) + x\, d(\mu_b, m_b(x))$ is a strictly increasing bijection from
+  $[0, \infty)$ onto $[0, d(\mu_a, \mu_b))$ and $y^*$ is the unique solution of $F(y) = 1$, for the
+  continuous increasing function
+  $F(y) = \sum_{b \ne a} d(\mu_a, m_b(x_b(y))) / d(\mu_b, m_b(x_b(y)))$ with $F(0) = 0$ and
+  $F(y) \to \infty$ as $y \to \min_{b \ne a} d(\mu_a, \mu_b)$ \cite[Theorem 5]{GK16}.
+  LMLRoadmaps: Identification 3.4.
+\end{theorem}
+
+\begin{theorem}
+  \label{prereq:ordering}
+  For arms in an exponential family and a vector of means with unique best arm $a$, if
+  $\mu_c \le \mu_b < \mu_a$ then $w^*_c(\mu) \le w^*_b(\mu)$ \cite[Proposition 6]{GK16}. No
+  LMLRoadmaps target covers it yet.
+\end{theorem}
+
+\begin{lemma}
+  \label{prereq:kt}
+  The Krichevsky--Trofimov distribution
+  $\mathrm{kt}(x) = \int_0^1 \frac{1}{\pi\sqrt{u(1-u)}} p_u(x)\, du$ is a probability on
+  $\{0, 1\}^n$ with $\sup_x \sup_u p_u(x) / \mathrm{kt}(x) \le 2\sqrt n$ \cite[Lemma 11]{GK16},
+  and with Bernoulli arms the GLRT with the threshold $\log(2t(K-1)/\delta)$ is $\delta$-correct
+  whatever the sampling rule \cite[Theorem 10]{GK16}. LMLRoadmaps: Identification 4.2.
+\end{lemma}
+
+\begin{lemma}
+  \label{prereq:deviational}
+  For arms dominated by exponential families and every $\alpha > 1$, there is an explicit
+  $C(\alpha, K)$ such that the GLRT with the threshold $\log(C t^\alpha / \delta)$ is
+  $\delta$-correct whatever the sampling rule \cite[Proposition 12]{GK16}. LMLRoadmaps:
+  Identification 4.2.
+\end{lemma}
+
+\begin{lemma}
+  \label{prereq:as}
+  For the GLRT with thresholds $\beta_t(h, \delta) \le \log(1/\delta) + f(t)$, $f(t) = o(t)$, if
+  almost surely the estimates converge to the model and the proportions of pulls to a set $W$ of
+  allocations, then almost surely $\tau_\delta \le c \log(1/\delta)$ for all small $\delta$, for
+  every $c > (\inf_{w \in W} D(\mu, w, \neg a^*))^{-1}$ \cite[Proposition 13]{GK16}.
+  LMLRoadmaps: Identification 4.4.
+\end{lemma}

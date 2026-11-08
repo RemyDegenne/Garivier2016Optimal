@@ -7,9 +7,14 @@ version: "v0.4"
 project:
   name: "Garivier2016Optimal"
   description: >-
-    <One paragraph: which paper, which results, on which libraries (LMLExplore, and through it
-    LML, Tau Ceti and Mathlib), in which generality, and the two-phase plan (phase 1 sorry-ed
-    headline statements with comparator challenges, phase 2 proofs).>
+    A Lean 4 formalization of "Optimal Best Arm Identification with Fixed Confidence" (Garivier and
+    Kaufmann, COLT 2016) on top of LMLExplore, and through it LML, Tau Ceti and Mathlib: the lower
+    bound on the sample complexity of δ-correct strategies, the characterization and the properties
+    of the optimal allocation, the informational and deviational thresholds of Chernoff's stopping
+    rule, and the almost sure and expected sample complexity of Track-and-Stop, for arms in an
+    exponential family. Most of the paper is already in LMLExplore, often in more generality; the
+    paper's statements here specialize it, and the library-shaped results it lacks are ported to
+    LMLExplore. Phase 1 states the headline results with sorry; phase 2 proves them.
   authors:
     - "Remy Degenne"
   responsible_maintainers:
@@ -22,32 +27,43 @@ repository:
   role: "substantive-development"
 
 sources:
-  - title: "<Paper title>"
+  - title: "Optimal Best Arm Identification with Fixed Confidence"
     authors:
-      - "<Paper author>"
-    id: "<Venue year, paper number or arXiv id, with the revision whose numbering the citations use>"
+      - "Aurélien Garivier"
+      - "Emilie Kaufmann"
+    id: "arXiv:1602.04589v2 (COLT 2016)"
     type: "conference-paper"
-    location: "<Which results of the paper are formalized; see status.scope>"
+    location: "Theorems 1, 5, 10 and 14, Remark 2, Propositions 6, 12 and 13; see status.scope"
     relationship: "formalizes"
     license: ""
     author_endorsement: "not-contacted"
     note: >-
-      <Where the paper source lives (source/), that the blueprint is a derived artifact of this
-      project, and whether the formalizer is an author. Errors found in the paper are in
-      notes/paper-errata.md.>
+      The arXiv sources of revision v2 are in source/arXiv-1602.04589v2/; the citations
+      [GK16, Theorem 1] use its numbering. The blueprint is a derived artifact of this project. The
+      formalizer is not an author. Errors found in the paper are in notes/paper-errata.md.
 
-related_formalizations: []   # earlier or parallel formalizations of this paper, if any
+related_formalizations: []
 
 classification:
-  arxiv: ["<primary arXiv category>"]
+  arxiv: ["math.ST", "stat.ML", "cs.LG"]
   msc2020:
-    - "<MSC code>"   # <meaning>
+    - "62L10"   # Sequential statistical analysis
+    - "62L05"   # Sequential statistical design
+    - "68T05"   # Learning and adaptive systems
 
 status:
   scope: >-
-    <Phase 1: list every headline result with its Lean name and blueprint label.
-    Phase 2: what is proved, what is not, and the dated history of major changes.>
-  sorry_count: 0
+    Phase 1 (statements, 2026-11-08). The headline results are stated in Lean with sorry, in
+    Garivier2016Optimal/GK2016/, one file per result, for best arm identification on the vectors of
+    means of an exponential family (ρ, id) with a unique best arm: Theorem 1 and Remark 2 (the lower
+    bound), Theorem 5 (the optimal allocation from a scalar equation), Proposition 6 (positivity,
+    continuity and ordering of the optimal allocation), Theorem 10 (the informational threshold for
+    Bernoulli arms), Proposition 12 (the deviational threshold), Proposition 13 (the almost sure
+    upper bound) and Theorem 14 (asymptotic optimality of Track-and-Stop in expectation, with
+    D-tracking and with C-tracking). The statements wait for the check against the paper before
+    the comparator challenges are generated. The lemmas of the paper that LMLExplore proves
+    (Lemmas 3, 4, 7, 8, 15, 17 and 19, Proposition 9) are cited in the blueprint.
+  sorry_count: 11
   sorry_in_definitions: 0
 
 alignment:
@@ -59,9 +75,62 @@ alignment:
     statement is more general), narrowMatch (the paper's is) or hasPart; and its entry in
     notes/paper-errata.md when the paper had to be corrected.
   statements:
-    - source: "<blueprint label> — <Theorem 1 of the paper>"
-      lean: "Garivier2016Optimal.<name>"
-      module: "Garivier2016Optimal.GK2016.<File>"
+    - source: "thm:lower — Theorem 1, lower bound on the sample complexity"
+      lean: "Garivier2016Optimal.charTime_mul_klBer_le_expectedStoppingTime"
+      module: "Garivier2016Optimal.GK2016.Theorem1"
+      status: "stated"
+      relation: "narrowMatch"
+      erratum: "E1"
+      note: "For δ ≤ 1/2; the paper states it for δ ∈ (0, 1), which is false beyond 1/2."
+    - source: "rem:lower_asymptotic — Remark 2, asymptotic lower bound"
+      lean: "Garivier2016Optimal.eventually_mul_log_le_expectedStoppingTime"
+      module: "Garivier2016Optimal.GK2016.Theorem1"
+      status: "stated"
+      relation: "closeMatch"
+      note: "The liminf ≥ T*(μ) as: for every c < T*(μ), 𝔼[τ_δ] ≥ c log(1/δ) for small δ."
+    - source: "thm:scalar — Theorem 5, the optimal allocation from a scalar equation"
+      lean: "Garivier2016Optimal.mem_optAlloc_iff_exists_scalar"
+      module: "Garivier2016Optimal.GK2016.Theorem5"
+      status: "stated"
+      relation: "closeMatch"
+      note: "Equation form: weights x with x_a = 1 and equal pair costs y, instead of x_b = g_b⁻¹(y)."
+    - source: "prop:optalloc — Proposition 6, part 1, positivity"
+      lean: "Garivier2016Optimal.pos_of_mem_optAlloc"
+      module: "Garivier2016Optimal.GK2016.Proposition6"
+      status: "stated"
+      relation: "hasPart"
+    - source: "prop:optalloc — Proposition 6, part 2, continuity"
+      lean: "Garivier2016Optimal.continuousAt_of_mem_optAlloc"
+      module: "Garivier2016Optimal.GK2016.Proposition6"
+      status: "stated"
+      relation: "hasPart"
+    - source: "prop:optalloc — Proposition 6, part 3, ordering"
+      lean: "Garivier2016Optimal.le_of_mem_optAlloc_of_le"
+      module: "Garivier2016Optimal.GK2016.Proposition6"
+      status: "stated"
+      relation: "hasPart"
+    - source: "thm:kt — Theorem 10, informational threshold for Bernoulli arms"
+      lean: "Garivier2016Optimal.measureReal_glrt_bernoulli_le"
+      module: "Garivier2016Optimal.GK2016.Theorem10"
       status: "stated"
       relation: "exactMatch"
-      # erratum: "E1"
+    - source: "prop:deviational — Proposition 12, deviational threshold"
+      lean: "Garivier2016Optimal.exists_measureReal_glrt_expFamilyEvidence_le"
+      module: "Garivier2016Optimal.GK2016.Proposition12"
+      status: "stated"
+      relation: "exactMatch"
+    - source: "prop:as — Proposition 13, almost sure upper bound"
+      lean: "Garivier2016Optimal.stoppingTime_glrt_ne_top_and_limsup_le"
+      module: "Garivier2016Optimal.GK2016.Proposition13"
+      status: "stated"
+      relation: "exactMatch"
+    - source: "thm:expectation — Theorem 14, with D-tracking"
+      lean: "Garivier2016Optimal.limsup_expectedStoppingTime_trackAndStop_div_log_le"
+      module: "Garivier2016Optimal.GK2016.Theorem14"
+      status: "stated"
+      relation: "hasPart"
+    - source: "thm:expectation — Theorem 14, with C-tracking"
+      lean: "Garivier2016Optimal.limsup_expectedStoppingTime_cTrackAndStop_div_log_le"
+      module: "Garivier2016Optimal.GK2016.Theorem14"
+      status: "stated"
+      relation: "hasPart"

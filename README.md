@@ -1,13 +1,14 @@
 # Garivier2016Optimal
 
-A Lean 4 formalization of *<title of the paper>* (<authors>, <venue, year>), on top of
+A Lean 4 formalization of *Optimal Best Arm Identification with Fixed Confidence* (Aurélien Garivier
+and Emilie Kaufmann, COLT 2016, arXiv:1602.04589v2), on top of
 [LMLExplore](https://github.com/LeanMachineLearning/LMLExplore), and so of
 [LML](https://github.com/LeanMachineLearning/LML), [Tau Ceti](https://github.com/TauCetiProject/TauCeti)
 and [Mathlib](https://github.com/leanprover-community/mathlib4). Made from
 [lml-paper-template](https://github.com/LeanMachineLearning/lml-paper-template).
 
 - Blueprint: https://RemyDegenne.github.io/Garivier2016Optimal/blueprint/
-- The paper: `source/`. Errors found in it, with their corrections: `notes/paper-errata.md`.
+- The paper: `source/arXiv-1602.04589v2/`; the outline of the formalization: `notes/blueprint-outline.md`. Errors found in it, with their corrections: `notes/paper-errata.md`.
 - The paper's results: `Garivier2016Optimal/GK2016/`, one file per result, listed with their status in
   `formalization.yaml`; comparator challenges in `comparator/`.
 - Library-shaped material: `Garivier2016Optimal/ForLMLExplore/`, which Tau Ceti workers port to LMLExplore;

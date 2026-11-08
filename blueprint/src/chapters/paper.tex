@@ -1,6 +1,270 @@
-\chapter{Main results}
-\label{chap:main}
+\chapter{Setting}
+\label{chap:setting}
 
-One chapter per part of the outline. Each result of the paper gets an environment with a label,
-a \verb|\lean{}| tag naming its declaration, \verb|\uses{}| for what it rests on, and
-\verb|\leanok| once it is stated (and on its proof once it is proved).
+An exponential family $(\nu_\theta)_\theta$ on $\R$, with densities $\exp(\theta x - b(\theta))$
+with respect to a measure $\xi$, is parameterized by its means, and $d(\mu, \mu')$ is the
+Kullback--Leibler divergence between its members of means $\mu$ and $\mu'$. A bandit model is a
+vector of means $\mu = (\mu_1, \dots, \mu_K)$ of arms in the family, and $\cS$ is the set of those
+with a unique best arm $a^*(\mu)$. For $\mu \in \cS$, $\Alt(\mu)$ is the set of models of $\cS$
+with another best arm, $\Sk$ the simplex, and the characteristic time is
+\[ T^*(\mu)^{-1} = \sup_{w \in \Sk} \inf_{\lambda \in \Alt(\mu)} \sum_{a=1}^K w_a d(\mu_a, \lambda_a). \]
+The maximizers $w^*(\mu)$ are the optimal allocations. In Lean, $\cS$ is LMLExplore's best arm
+identification task restricted to the vectors of means of the family $(\rho, \mathrm{id})$, the
+arm laws $\nu$ being its members. A strategy is an identification algorithm (sampling rule,
+stopping rule, recommendation); it is $\delta$-PAC if on every $\mu \in \cS$ it stops almost surely
+and recommends $a^*(\mu)$ with probability at least $1 - \delta$.
+
+\chapter{The lower bound}
+\label{chap:lower}
+
+\begin{theorem}[{\cite[Theorem 1]{GK16}}]
+  \label{thm:lower}
+  \lean{Garivier2016Optimal.charTime_mul_klBer_le_expectedStoppingTime}
+  \leanok
+  \uses{lem:transportation}
+  Let $\delta \in (0, 1/2]$. For every $\delta$-correct strategy and every $\mu \in \cS$,
+  $\E_\mu[\tau_\delta] \ge T^*(\mu) \kl(\delta, 1 - \delta)$.
+\end{theorem}
+
+The paper states it for $\delta \in (0, 1)$, which is false beyond $1/2$
+(\texttt{notes/paper-errata.md}, E1).
+
+\begin{proof}
+  \uses{lem:transportation}
+  A case of LMLExplore's lower bound for every identification task, \cref{lem:transportation}.
+\end{proof}
+
+\begin{lemma}[{\cite[Lemma 1]{KCG16}}]
+  \label{lem:transportation}
+  \lean{LMLExplore.Identification.IdentTask.IsDeltaCorrect.charTime_mul_le_expectedStoppingTime}
+  \leanok
+  For every identification task, every $\delta$-correct strategy with $\delta \le 1/2$ and every
+  admissible model with a single correct answer,
+  $\E[\tau] \ge T^*(\mu) \kl(\delta, 1 - \delta)$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  In LMLExplore.
+\end{proof}
+
+\begin{corollary}[{\cite[Remark 2]{GK16}}]
+  \label{rem:lower_asymptotic}
+  \lean{Garivier2016Optimal.eventually_mul_log_le_expectedStoppingTime}
+  \leanok
+  \uses{thm:lower}
+  For a family of $\delta$-correct strategies and every $\mu \in \cS$,
+  $\liminf_{\delta \to 0} \E_\mu[\tau_\delta] / \log(1/\delta) \ge T^*(\mu)$: for every
+  $c < T^*(\mu)$, $\E_\mu[\tau_\delta] \ge c \log(1/\delta)$ for all small enough $\delta$.
+\end{corollary}
+
+\begin{proof}
+  \uses{lem:lower_asymptotic_lml}
+  A case of \cref{lem:lower_asymptotic_lml}.
+\end{proof}
+
+\begin{lemma}
+  \label{lem:lower_asymptotic_lml}
+  \lean{LMLExplore.Identification.IdentTask.eventually_mul_ofReal_log_le_expectedStoppingTime}
+  \leanok
+  The asymptotic lower bound for every identification task.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  In LMLExplore.
+\end{proof}
+
+\chapter{The optimal allocation}
+\label{chap:optalloc}
+
+\begin{lemma}[{\cite[Lemma 3]{GK16}}]
+  \label{lem:pair_cost}
+  \lean{LMLExplore.Identification.altCost_baiTask_restrict_eq_iInf_expFamilyPairCost}
+  \leanok
+  For every $w \in \Sk$,
+  $\inf_{\lambda \in \Alt(\mu)} \sum_a w_a d(\mu_a, \lambda_a)
+  = \min_{b \ne a^*} \bigl( w_{a^*} d(\mu_{a^*}, m_b) + w_b d(\mu_b, m_b) \bigr)$, with
+  $m_b = (w_{a^*}\mu_{a^*} + w_b\mu_b) / (w_{a^*} + w_b)$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  In LMLExplore.
+\end{proof}
+
+\begin{lemma}[{\cite[Lemma 4]{GK16}}]
+  \label{lem:equalize}
+  \lean{LMLExplore.Identification.answerValue_baiTask_restrict_eq_of_mem_optAlloc}
+  \leanok
+  At the optimal allocation, the costs of all the pairs $(a^*, b)$ are equal.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  In LMLExplore.
+\end{proof}
+
+\begin{theorem}[{\cite[Theorem 5]{GK16}}]
+  \label{thm:scalar}
+  \lean{Garivier2016Optimal.mem_optAlloc_iff_exists_scalar}
+  \leanok
+  \uses{lem:equalize, prereq:scalar}
+  For $\mu \in \cS$ with best arm $a$, an allocation $w$ is optimal if and only if
+  $w = x / \sum_c x_c$ for weights $x$ with $x_a = 1$ and, for some $y$ and every $b \ne a$,
+  $x_b > 0$ and $g_b(x_b) = d(\mu_a, m_b) + x_b d(\mu_b, m_b) = y$ with
+  $m_b = (\mu_a + x_b\mu_b)/(1 + x_b)$, such that
+  $F(y) = \sum_{b \ne a} d(\mu_a, m_b) / d(\mu_b, m_b) = 1$. The paper writes $x_b = g_b^{-1}(y)$
+  and computes the unique solution $y^*$ of $F(y) = 1$ by bisection.
+\end{theorem}
+
+\begin{proof}
+  \uses{prereq:scalar}
+  The paper-level form of Part II, \cref{prereq:scalar}.
+\end{proof}
+
+\begin{proposition}[{\cite[Proposition 6]{GK16}}]
+  \label{prop:optalloc}
+  \lean{Garivier2016Optimal.pos_of_mem_optAlloc, Garivier2016Optimal.continuousAt_of_mem_optAlloc,
+    Garivier2016Optimal.le_of_mem_optAlloc_of_le}
+  \leanok
+  \uses{prereq:ordering}
+  For $\mu \in \cS$:
+  (1) $w^*_a(\mu) > 0$ for every arm $a$;
+  (2) $w^*$ is continuous at $\mu$;
+  (3) if $\mu_{a^*} > \mu_2 \ge \dots \ge \mu_K$, then $w^*_2(\mu) \ge \dots \ge w^*_K(\mu)$.
+\end{proposition}
+
+\begin{proof}
+  \uses{prereq:ordering}
+  Parts (1) and (2) are in LMLExplore (\texttt{pos\_of\_mem\_optAlloc\_baiTask\_restrict},
+  \texttt{continuousAt\_of\_mem\_optAlloc\_baiTask\_restrict}); part (3) is
+  \cref{prereq:ordering}.
+\end{proof}
+
+\chapter{Track-and-Stop}
+\label{chap:tas}
+
+\begin{lemma}[{\cite[Lemma 7]{GK16}}]
+  \label{lem:ctracking}
+  \lean{LMLExplore.Identification.CTracking.abs_pullCount_sub_sum_le_mul_one_add_sqrt,
+    LMLExplore.Identification.CTracking.sqrt_add_sub_le_pullCount}
+  \leanok
+  C-tracking ensures $N_a(t) \ge \sqrt{t + K^2} - 2K$ and
+  $\max_a |N_a(t) - \sum_{s < t} w^*_a(\hat\mu(s))| \le K(1 + \sqrt t)$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  In LMLExplore.
+\end{proof}
+
+\begin{lemma}[{\cite[Lemma 8]{GK16}}]
+  \label{lem:dtracking}
+  \lean{LMLExplore.Identification.DTracking.sqrt_sub_sub_one_lt_pullCount,
+    LMLExplore.Identification.DTracking.tendsto_pullCount_div}
+  \leanok
+  D-tracking ensures $N_a(t) \ge (\sqrt t - K/2)_+ - 1$, and the proportions of pulls converge to
+  the limit of the targets whenever the targets converge.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  In LMLExplore.
+\end{proof}
+
+\begin{proposition}[{\cite[Proposition 9]{GK16}}]
+  \label{prop:convergence}
+  \lean{LMLExplore.Identification.CTracking.tendsto_pullCount_div}
+  \leanok
+  \uses{lem:ctracking, lem:dtracking}
+  Under C-tracking and D-tracking, $N_a(t)/t \to w^*_a(\mu)$ almost surely.
+\end{proposition}
+
+\begin{proof}
+  \leanok
+  In LMLExplore, given the almost sure convergence of the targets $w^*(\hat\mu(t))$, which
+  follows from that of the empirical means and the continuity of $w^*$.
+\end{proof}
+
+\begin{theorem}[{\cite[Theorem 10]{GK16}}]
+  \label{thm:kt}
+  \lean{Garivier2016Optimal.measureReal_glrt_bernoulli_le}
+  \leanok
+  \uses{prereq:kt}
+  For Bernoulli arms, whatever the sampling rule, Chernoff's stopping rule with the threshold
+  $\beta(t, \delta) = \log(2t(K-1)/\delta)$ ensures
+  $\Prob_\mu(\tau_\delta < \infty, \hat a_{\tau_\delta} \ne a^*) \le \delta$ for every $\mu \in \cS$.
+\end{theorem}
+
+\begin{proof}
+  \uses{prereq:kt}
+  \Cref{prereq:kt}.
+\end{proof}
+
+\begin{proposition}[{\cite[Proposition 12]{GK16}}]
+  \label{prop:deviational}
+  \lean{Garivier2016Optimal.exists_measureReal_glrt_expFamilyEvidence_le}
+  \leanok
+  \uses{prereq:deviational}
+  For every $\alpha > 1$ there is $C = C(\alpha, K)$ such that, whatever the sampling rule,
+  Chernoff's stopping rule with the threshold $\beta(t, \delta) = \log(C t^\alpha / \delta)$ ensures
+  $\Prob_\mu(\tau_\delta < \infty, \hat a_{\tau_\delta} \ne a^*) \le \delta$ for every $\mu \in \cS$.
+\end{proposition}
+
+\begin{proof}
+  \uses{prereq:deviational}
+  \Cref{prereq:deviational}.
+\end{proof}
+
+\chapter{Sample complexity}
+\label{chap:sc}
+
+\begin{proposition}[{\cite[Proposition 13]{GK16}}]
+  \label{prop:as}
+  \lean{Garivier2016Optimal.stoppingTime_glrt_ne_top_and_limsup_le}
+  \leanok
+  \uses{prereq:as}
+  Let $\alpha \in [1, e/2]$, $r(t) = O(t^\alpha)$ and $\beta(t, \delta) = \log(r(t)/\delta)$. For
+  every sampling rule with $N_a(t)/t \to w^*_a$ almost surely, $\tau_\delta < \infty$ almost surely
+  for every $\delta \in (0, 1)$, and almost surely
+  $\limsup_{\delta \to 0} \tau_\delta / \log(1/\delta) \le \alpha T^*(\mu)$.
+\end{proposition}
+
+\begin{proof}
+  \uses{prereq:as}
+  \Cref{prereq:as}.
+\end{proof}
+
+\begin{theorem}[{\cite[Theorem 14]{GK16}}]
+  \label{thm:expectation}
+  \lean{Garivier2016Optimal.limsup_expectedStoppingTime_trackAndStop_div_log_le,
+    Garivier2016Optimal.limsup_expectedStoppingTime_cTrackAndStop_div_log_le}
+  \leanok
+  \uses{lem:ctracking, lem:dtracking, lem:tas_lml}
+  Let $\alpha \in [1, e/2]$, $r(t) = O(t^\alpha)$ and $\beta(t, \delta) = \log(r(t)/\delta)$.
+  Track-and-Stop with C-tracking or D-tracking has
+  $\limsup_{\delta \to 0} \E_\mu[\tau_\delta] / \log(1/\delta) \le \alpha T^*(\mu)$.
+\end{theorem}
+
+\begin{proof}
+  \uses{lem:tas_lml, prop:optalloc}
+  LMLExplore proves the stronger bound with $T^*(\mu)$ for every polynomial $r$,
+  \cref{lem:tas_lml}; the continuity and semicontinuity it assumes follow from
+  \cref{prop:optalloc} and the continuity of the costs.
+\end{proof}
+
+\begin{lemma}
+  \label{lem:tas_lml}
+  \lean{LMLExplore.Identification.IdentTask.eventually_expectedStoppingTime_trackAndStop_le_of_charTime_lt,
+    LMLExplore.Identification.IdentTask.eventually_expectedStoppingTime_cTrackAndStop_le_of_charTime_lt}
+  \leanok
+  Track-and-Stop with D-tracking or C-tracking of optimal allocations has
+  $\E_\mu[\tau_\delta] \le c \log(1/\delta)$ for all small $\delta$, for every $c > T^*(\mu)$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  In LMLExplore, through the concentration of the empirical means under tracking
+  \cite[Lemma 19]{GK16}.
+\end{proof}

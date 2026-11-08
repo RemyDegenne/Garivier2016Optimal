@@ -1,14 +1,93 @@
 {
   "GK16": {
-    "uri": "",
+    "uri": "https://arxiv.org/abs/1602.04589",
+    "identifiers": {
+      "arxiv": "1602.04589"
+    },
     "citation": {
       "id": "GK16",
-      "type": "article",
-      "title": "<title of the paper>",
-      "author": [{"family": "<family name>", "given": "<given name>"}],
-      "issued": {"date-parts": [[2026]]}
+      "type": "paper-conference",
+      "title": "Optimal Best Arm Identification with Fixed Confidence",
+      "author": [
+        {
+          "family": "Garivier",
+          "given": "Aurélien"
+        },
+        {
+          "family": "Kaufmann",
+          "given": "Emilie"
+        }
+      ],
+      "container-title": "Proceedings of the 29th Conference on Learning Theory (COLT)",
+      "issued": {
+        "date-parts": [
+          [
+            2016
+          ]
+        ]
+      }
     },
-    "identifiers": {},
-    "version": ""
+    "version": "v2"
+  },
+  "LS": {
+    "uri": "https://doi.org/10.1017/9781108571401",
+    "citation": {
+      "id": "LS",
+      "type": "book",
+      "title": "Bandit Algorithms",
+      "author": [
+        {
+          "family": "Lattimore",
+          "given": "Tor"
+        },
+        {
+          "family": "Szepesvári",
+          "given": "Csaba"
+        }
+      ],
+      "publisher": "Cambridge University Press",
+      "DOI": "10.1017/9781108571401",
+      "issued": {
+        "date-parts": [
+          [
+            2020
+          ]
+        ]
+      }
+    }
+  },
+  "KCG16": {
+    "uri": "https://arxiv.org/abs/1407.4443",
+    "identifiers": {
+      "arxiv": "1407.4443"
+    },
+    "citation": {
+      "id": "KCG16",
+      "type": "article-journal",
+      "title": "On the Complexity of Best-Arm Identification in Multi-Armed Bandit Models",
+      "author": [
+        {
+          "family": "Kaufmann",
+          "given": "Emilie"
+        },
+        {
+          "family": "Cappé",
+          "given": "Olivier"
+        },
+        {
+          "family": "Garivier",
+          "given": "Aurélien"
+        }
+      ],
+      "container-title": "Journal of Machine Learning Research",
+      "volume": "17",
+      "issued": {
+        "date-parts": [
+          [
+            2016
+          ]
+        ]
+      }
+    }
   }
 }
