@@ -207,10 +207,14 @@ The paper states it for $\delta \in (0, 1)$, which is false beyond $1/2$
   \lean{Garivier2016Optimal.exists_measureReal_glrt_expFamilyEvidence_le}
   \leanok
   \uses{prereq:deviational}
-  For every $\alpha > 1$ there is $C = C(\alpha, K)$ such that, whatever the sampling rule,
-  Chernoff's stopping rule with the threshold $\beta(t, \delta) = \log(C t^\alpha / \delta)$ ensures
+  For every $\alpha > 1$ and every $\delta \in (0, 1)$ there is $C = C(\alpha, K, \delta)$ such
+  that, whatever the sampling rule, Chernoff's stopping rule with the threshold
+  $\beta(t, \delta) = \log(C t^\alpha / \delta)$ ensures
   $\Prob_\mu(\tau_\delta < \infty, \hat a_{\tau_\delta} \ne a^*) \le \delta$ for every $\mu \in \cS$.
 \end{proposition}
+
+The paper claims a constant $C(\alpha, K)$ that does not depend on $\delta$, which is false
+(\texttt{notes/paper-errata.md}, E2).
 
 \begin{proof}
   \uses{prereq:deviational}

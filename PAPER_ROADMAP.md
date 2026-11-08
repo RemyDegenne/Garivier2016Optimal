@@ -34,8 +34,10 @@ Paper: RemyDegenne/Garivier2016Optimal · LMLExplore 5113b88ad95f · LMLRoadmaps
 - R9: Identification 4.2 asks for the Bernoulli thresholds through the Krichevsky–Trofimov mixture,
   next to the other union-bound thresholds; the mixture bound `sup p_u(x)/kt(x) ≤ 2√n` is a
   prerequisite and belongs with it.
-- R10: Identification 4.2 asks for an explicit `C(α, K)`, for arms dominated by any exponential
-  families, from the two-sided bound of Layer 1.2; the paper's existential `C` is a consequence.
+- R10: the constant must depend on `δ`: no `C(α, K)` makes `log(C t^α/δ)` `δ`-correct for every
+  `δ` (`notes/paper-errata.md`, E2). Identification 4.2 asks for an explicit `C(α, K)`, for arms
+  dominated by any exponential families, from the two-sided bound of Layer 1.2; prove it with an
+  explicit `C(α, K, δ)` instead, from which the paper's corrected existential `C` follows.
 - R11: Identification 4.4 states it for any statistic with thresholds `log(1/δ) + o(t)`, any
   estimator converging almost surely and proportions converging to a set `W` of allocations, with
   every `c > (inf_{w ∈ W} D(θ, w, ¬i))⁻¹`; the paper's `α T*(μ)` is a case.

@@ -60,8 +60,8 @@ status:
     continuity and ordering of the optimal allocation), Theorem 10 (the informational threshold for
     Bernoulli arms), Proposition 12 (the deviational threshold), Proposition 13 (the almost sure
     upper bound) and Theorem 14 (asymptotic optimality of Track-and-Stop in expectation, with
-    D-tracking and with C-tracking). The statements wait for the check against the paper before
-    the comparator challenges are generated. The lemmas of the paper that LMLExplore proves
+    D-tracking and with C-tracking). The statements were checked against the paper on 2026-11-08,
+    which corrected Proposition 12 (erratum E2). The lemmas of the paper that LMLExplore proves
     (Lemmas 3, 4, 7, 8, 15, 17 and 19, Proposition 9) are cited in the blueprint.
   sorry_count: 11
   sorry_in_definitions: 0
@@ -118,7 +118,9 @@ alignment:
       lean: "Garivier2016Optimal.exists_measureReal_glrt_expFamilyEvidence_le"
       module: "Garivier2016Optimal.GK2016.Proposition12"
       status: "stated"
-      relation: "exactMatch"
+      relation: "narrowMatch"
+      erratum: "E2"
+      note: "With C depending on δ; the paper's C(α, K), independent of δ, does not exist."
     - source: "prop:as — Proposition 13, almost sure upper bound"
       lean: "Garivier2016Optimal.stoppingTime_glrt_ne_top_and_limsup_le"
       module: "Garivier2016Optimal.GK2016.Proposition13"

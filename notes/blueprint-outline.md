@@ -40,7 +40,7 @@ numbering below is that of this revision, which LMLExplore's citations use too.
 | Proposition 9 | `N_a(t)/t → w*_a` a.s. for C- and D-tracking | LMLExplore, given converging targets | `CTracking.tendsto_pullCount_div`, `DTracking.tendsto_pullCount_div` |
 | Theorem 10 | Bernoulli: threshold `log(2t(K-1)/δ)` is `δ`-PAC | Identification 4.2 | `measureReal_glrt_bernoulli_le` |
 | Lemma 11 | Krichevsky–Trofimov: `p_u(x)/kt(x) ≤ 2√n` | Identification 4.2 | (prerequisite of Theorem 10) |
-| Proposition 12 | threshold `log(C t^α/δ)`, `α > 1`, is `δ`-PAC | Identification 4.2 (LMLExplore has `K log(2t(t+1)) + x_δ`) | `exists_measureReal_glrt_expFamilyEvidence_le` |
+| Proposition 12 | threshold `log(C t^α/δ)`, `α > 1`, is `δ`-PAC, with `C` depending on `δ` (erratum E2) | Identification 4.2 (LMLExplore has `K log(2t(t+1)) + x_δ`) | `exists_measureReal_glrt_expFamilyEvidence_le` |
 | Proposition 13 | a.s. `limsup τ_δ/log(1/δ) ≤ α T*(μ)` | Identification 4.4 | `stoppingTime_glrt_ne_top_and_limsup_le` |
 | Theorem 14 | `limsup 𝔼[τ_δ]/log(1/δ) ≤ α T*(μ)`, C- or D-tracking | LMLExplore (stronger: no `α`) | `limsup_expectedStoppingTime_trackAndStop_div_log_le`, `limsup_expectedStoppingTime_cTrackAndStop_div_log_le` |
 | Lemmas 15, 17 | tracking a cumulated sum; tracking a changing sequence | LMLExplore | `Tracking.lean` |
@@ -54,6 +54,8 @@ Lean names without a prefix are in the namespace `Garivier2016Optimal`; the othe
 ## Statement choices
 
 - **Theorem 1** holds for `δ ≤ 1 / 2` only (erratum E1). The Lean statement adds that hypothesis.
+- **Proposition 12** holds with a constant `C` that depends on `δ` (erratum E2). The Lean statement
+  fixes `δ` before the constant; `C` still depends neither on the family nor on the sampling rule.
 - **Theorem 5** is stated as an equivalence in equation form (weights `x` with `x_a = 1`, a common
   value `y` of the pair costs `g_b(x_b)`, and `F`'s equation), not with the inverse functions
   `x_b = g_b⁻¹` and the bisection on `F`.

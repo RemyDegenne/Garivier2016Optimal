@@ -11,10 +11,12 @@ public import LMLExplore.Identification.Task.BestArm
 /-!
 # The deviational threshold [GK16, Proposition 12]
 
-For best arm identification on the vectors of means of an exponential family and every exponent
-`p > 1`, there is a constant `C`, depending on `p` and the number of arms only, such that whatever
-the sampling rule and the recommendation rule, Chernoff's stopping rule with the thresholds
-`β(t, δ) = log (C t ^ p / δ)` stops with an arm that is not the best with probability at most `δ`.
+For best arm identification on the vectors of means of an exponential family, every exponent
+`p > 1` and every risk `δ ∈ (0, 1)`, there is a constant `C`, depending on `p`, `δ` and the number
+of arms only, such that whatever the sampling rule and the recommendation rule, Chernoff's stopping
+rule with the thresholds `β(t, δ) = log (C t ^ p / δ)` stops with an arm that is not the best with
+probability at most `δ`. The paper claims a `C` that does not depend on `δ`, which is false
+(`notes/paper-errata.md`, E2).
 
 The statistic is the generalized likelihood ratio evidence of the family, Chernoff's `Z(t)` of
 [GK16, Section 3.2]. LMLExplore has the thresholds `K log (2 t (t + 1)) + x_δ` of [LS, Lemma 33.7]
@@ -42,16 +44,18 @@ namespace Garivier2016Optimal
 variable {α : Type*} [Fintype α] [DecidableEq α] [Nonempty α] {mα : MeasurableSpace α}
   [MeasurableSingletonClass α]
 
-/-- **The deviational threshold** [GK16, Proposition 12]. For every exponent `p > 1` there is a
-constant `C > 0` such that, for every exponential family `(ρ, id)` and every `δ ∈ (0, 1)`, whatever
+/-- **The deviational threshold** [GK16, Proposition 12]. For every exponent `p > 1` and every
+`δ ∈ (0, 1)` there is a constant `C > 0` such that, for every exponential family `(ρ, id)`, whatever
 the sampling rule `alg` and the recommendation rule `rec`, Chernoff's stopping rule with the
 thresholds `log (C t ^ p / δ)` stops with an arm that is not the best with probability at most
-`δ`, on every vector of means of the family with a unique best arm. -/
-theorem exists_measureReal_glrt_expFamilyEvidence_le {p : ℝ} (hp : 1 < p) :
+`δ`, on every vector of means of the family with a unique best arm. The constant depends on `δ`:
+the paper's `C(α, K)` does not exist (`notes/paper-errata.md`, E2). -/
+theorem exists_measureReal_glrt_expFamilyEvidence_le {p : ℝ} (hp : 1 < p) {δ : ℝ}
+    (hδ : δ ∈ Set.Ioo 0 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (ν : (α → ℝ) → Kernel α ℝ) [∀ μ, IsMarkovKernel (ν μ)] (ρ : Measure ℝ),
       (∀ c, ¬ id =ᵐ[ρ] fun _ ↦ c) →
       (∀ μ a, ν μ a = ρ.expFamily id (ρ.natParam id (μ a))) →
-      ∀ δ ∈ Set.Ioo (0 : ℝ) 1, ∀ (alg : Algorithm Unit α ℝ) (rec : (n : ℕ) → Hist Unit α ℝ n → α)
+      ∀ (alg : Algorithm Unit α ℝ) (rec : (n : ℕ) → Hist Unit α ℝ n → α)
         (hrec : ∀ n, Measurable (rec n))
         (hstop : ∀ n, MeasurableSet {h : Hist Unit α ℝ n |
           ENNReal.ofReal (log (C * (n : ℝ) ^ p / δ)) <
