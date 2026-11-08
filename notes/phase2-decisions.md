@@ -68,3 +68,87 @@ Decisions taken in the unattended rounds of `scripts/formalize.sh`, by date.
   `ForLMLExplore/` for the forbidden constructs, `leanblueprint pdf`, `leanblueprint web` and
   `lake exe checkdecls blueprint/lean_decls`. No definition in the closure of a headline statement
   changed, so `lake build Comparator` was not needed.
+
+## 2026-11-08: the optimal allocation (Proposition 6 part 3, Theorem 5)
+
+- **Job and area.** Advance. Tag, Refresh and Refactor pull request did not apply: LMLRoadmaps
+  `main` is still `d01bdd6b89ce`, and the paper's only pull request, LMLExplore#242 (R14), is
+  open with status `PR #242`. The area is the chapter on the optimal allocation, where Theorem 5
+  and Proposition 6 part 3 were left. Both depend only on results LMLExplore proves.
+- **Proposition 6 part 3 without the scalar equation.** The paper derives the ordering from
+  Theorem 5. Here it follows from Lemma 4 alone, which LMLExplore proves, and two monotonicity
+  properties of the pair cost `C_b(x) = w_a d(μ a, m) + x d(μ b, m)`:
+  - it increases in `x` (`strictMonoOn_expFamilyPairCost`, in LMLExplore);
+  - it decreases in the lower mean `μ b ≤ μ a` (new). If `μ c ≤ μ b` and `w b < w c`, then
+    `C_b(w b) < C_b(w c) ≤ C_c(w c)`, which contradicts `C_b(w b) = C_c(w c)`.
+
+  So R7 no longer waits for R5, and its proposed target S1 is rewritten to this route.
+- **Generality of R7.** The ordering is stated for every statistic `T`, as LMLExplore's results on
+  best arm identification are. It also covers the `β`-optimal allocations of
+  `Identification/Task/TopTwo/BestArm.lean`: for `β > 0` (`le_of_…_of_le`), and strictly for
+  `β ∈ (0, 1)` (`lt_of_…_of_lt`, where `w c > 0` is needed). The optimal allocation is the case
+  `β = w a`. The private lemma `mem_Ioo_of_mem_optAlloc_baiTask_restrict` gives `w a ∈ (0, 1)`
+  when there is an arm `b ≠ a`. For it, the order and the strict order hold as equivalences
+  (`le_iff_le_of_mem_optAlloc_baiTask_restrict`, `lt_iff_lt_of_mem_optAlloc_baiTask_restrict`).
+  The paper's statement is the `←` direction of the first.
+- **Placement.** The monotonicity in the mean goes to
+  `ForLMLExplore/Probability/Distributions/ExponentialFamily/Mean.lean`, the path of the
+  LMLExplore file it extends, in its namespace `MeasureTheory.Measure`. The ordering goes to
+  `ForLMLExplore/Identification/Task/BestArmOrder.lean`, as in `PAPER_ROADMAP.md`. It imports
+  `Identification/Task/TopTwo/BestArm.lean`, where a port would put it. Both files are R7's.
+- **Theorem 5 is blocked.** The frozen statement `mem_optAlloc_iff_exists_scalar` has no
+  hypothesis that there is an arm other than `a`, and it is false for a single arm. The
+  allocation `1` is optimal, since there are no alternatives and `D(μ, w, ¬a) = ⊤` for every `w`.
+  The right-hand side asks for an empty sum equal to `1`. The paper leaves `K ≥ 2` implicit
+  (`notes/paper-errata.md`, E3). The following file compiled with `lake env lean` against the
+  library of this commit. It derives `False` from the statement, which is proved with `sorry`:
+
+  ```lean
+  import Garivier2016Optimal.GK2016.Theorem5
+  import LMLExplore.Bandits.Instances
+  import LMLExplore.Probability.Distributions.ExponentialFamily.Gaussian
+
+  open MeasureTheory ProbabilityTheory LMLExplore LMLExplore.Identification LMLExplore.Bandits
+
+  example : False := by
+    set ρ := gaussianReal 0 1
+    have hρ : ∀ c, ¬ id =ᵐ[ρ] fun _ ↦ c := not_ae_eq_const_gaussianReal 0 one_ne_zero
+    have hν : ∀ (μ' : Unit → ℝ) b,
+        gaussianBandit μ' 1 b = ρ.expFamily id (ρ.natParam id (μ' b)) := by
+      intro μ' b
+      rw [gaussianBandit_apply, expFamily_natParam_gaussianReal 0 one_ne_zero]
+    have hμ : ∀ b : Unit, (0 : Unit → ℝ) b ∈ ρ.expFamilyMeans id :=
+      fun _ ↦ mem_expFamilyMeans_gaussianReal 0 one_ne_zero _
+    set task := (baiTask (fun μ ↦ gaussianBandit μ 1) id).restrict
+      {μ' : Unit → ℝ | ∀ b, μ' b ∈ ρ.expFamilyMeans id}
+    have h_alt : task.alt () = ∅ := by
+      ext θ
+      simp only [Set.mem_empty_iff_false, iff_false]
+      intro hθ
+      rw [IdentTask.alt_restrict] at hθ
+      obtain ⟨b, hb, -⟩ := (mem_alt_baiTask_iff _ _).1 hθ.1
+      exact hb rfl
+    have h_top (v : Unit → ℝ) : task.altCost 0 v () = ⊤ := by
+      rw [IdentTask.altCost_def, h_alt]
+      simp
+    have h_opt : (fun _ ↦ (1 : ℝ)) ∈ task.optAlloc 0 () := by
+      rw [IdentTask.mem_optAlloc_iff_isMaxOn]
+      refine ⟨by simp [mem_simplex_iff], fun v _ ↦ ?_⟩
+      simp [h_top]
+    obtain ⟨y, x, -, -, hF, -⟩ := (Garivier2016Optimal.mem_optAlloc_iff_exists_scalar
+      (fun μ ↦ gaussianBandit μ 1) ρ hρ hν hμ (a := ()) (fun b hb ↦ absurd rfl hb)).1 h_opt
+    simp at hF
+  ```
+
+  The statements are frozen, so this round changes neither the statement nor its challenge. It
+  sets the status of Theorem 5 to `blocked` in `formalization.yaml`, with the erratum E3, and
+  leaves the decision to the user. The fix is the extra hypothesis `∃ b, b ≠ a` (or
+  `Nontrivial α`), with a regenerated challenge. With it, the statement is expected to hold
+  (not checked in Lean): `⇒` by a first-order optimality argument at the optimal allocation, `⇐`
+  by uniqueness of the solution of the system, since `C_b` and
+  `x ↦ d(μ a, m_b(x)) / d(μ b, m_b(x))` both increase. That is R5's work, still `todo`.
+- **Checks.** This round `scripts/check-build.sh` (4 declarations use `sorry`, no other warning),
+  `scripts/check-forlmlexplore.sh` and `python3 scripts/check-blueprint.py` ran without needing
+  an approval. Also run: `lake exe runLinter Garivier2016Optimal`, `#print axioms` of the new
+  results (only `propext`, `Classical.choice` and `Quot.sound`), `leanblueprint pdf`,
+  `leanblueprint web`, `lake exe checkdecls blueprint/lean_decls` and `lake build Comparator`.

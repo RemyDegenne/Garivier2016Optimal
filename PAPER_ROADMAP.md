@@ -12,7 +12,7 @@ Paper: RemyDegenne/Garivier2016Optimal · LMLExplore 5113b88ad95f · LMLRoadmaps
 | R4 | Existence and uniqueness of the optimal allocation [GK16, Theorem 5] | exists | `LMLExplore.Identification.exists_optAlloc_baiTask_restrict_eq_singleton` | – | |
 | R5 | The optimal allocation from the scalar equation `F(y*) = 1` [GK16, Theorem 5] | target | Identification 3.4 | todo | `ForLMLExplore/Identification/Task/BestArmScalar.lean` |
 | R6 | Positivity and continuity of the optimal allocation [GK16, Proposition 6, parts 1–2] | exists | `LMLExplore.Identification.pos_of_mem_optAlloc_baiTask_restrict` | – | |
-| R7 | The optimal allocation is ordered like the means [GK16, Proposition 6, part 3] | staged | S1 | todo | `ForLMLExplore/Identification/Task/BestArmOrder.lean` |
+| R7 | The optimal allocation is ordered like the means [GK16, Proposition 6, part 3] | staged | S1 | proved | `ForLMLExplore/Identification/Task/BestArmOrder.lean`, `ForLMLExplore/Probability/Distributions/ExponentialFamily/Mean.lean` |
 | R8 | C-tracking and D-tracking guarantees [GK16, Lemmas 7, 8, 15, 17, Proposition 9] | exists | `LMLExplore.Identification.CTracking.tendsto_pullCount_div` | – | |
 | R9 | The Krichevsky–Trofimov mixture and the informational threshold for Bernoulli arms [GK16, Lemma 11, Theorem 10] | target | Identification 4.2 | todo | `ForLMLExplore/Identification/KTThreshold.lean` |
 | R10 | The deviational thresholds `log(C t^α/δ)` [GK16, Proposition 12] | target | Identification 4.2 | todo | `ForLMLExplore/Identification/DeviationalThreshold.lean` |
@@ -29,7 +29,19 @@ Paper: RemyDegenne/Garivier2016Optimal · LMLExplore 5113b88ad95f · LMLRoadmaps
 - R5: Identification 3.4 asks for the scalar equation whenever the inner infimum has a unique
   minimizer for all weights, in particular for a common family and for Gaussian arms with
   arm-dependent known variances, not only for one exponential family as in the paper.
+- R5: the paper's Theorem 5 is false for a single arm (`notes/paper-errata.md`, E3), so the
+  library statement needs an arm `b ≠ a`, as `betaAnswerValue_baiTask_restrict_pos` does.
 - R6: continuity is `LMLExplore.Identification.continuousAt_of_mem_optAlloc_baiTask_restrict`.
+- R7: proved without the scalar equation of R5, from the equality of the pair costs at the
+  optimal allocation [GK16, Lemma 4] and two monotonicity properties of the pair cost: it
+  increases in the weight of the other arm (`strictMonoOn_expFamilyPairCost`), and it decreases
+  in the lower mean (`strictAntiOn_expFamilyPairCost_right`, `antitoneOn_expFamilyPairCost_right`,
+  in `ForLMLExplore/Probability/Distributions/ExponentialFamily/Mean.lean`; they belong in
+  LMLExplore's `Probability/Distributions/ExponentialFamily/Mean.lean`, after
+  `strictMonoOn_expFamilyPairCost`). The ordering holds for every statistic `T` and for the
+  `β`-optimal allocations of `Identification/Task/TopTwo/BestArm.lean`: for `β > 0`, and strictly
+  for `β ∈ (0, 1)`. The optimal allocation is the case `β = w a`, with both the order and the
+  strict order as equivalences, `w c ≤ w b ↔ μ c ≤ μ b`.
 - R8: D-tracking is `LMLExplore.Identification.DTracking`; LMLExplore's convergence of the
   proportions assumes converging targets, which Proposition 9 obtains from the continuity of `w*`.
 - R9: Identification 4.2 asks for the Bernoulli thresholds through the Krichevsky–Trofimov mixture,
@@ -57,11 +69,16 @@ Paper: RemyDegenne/Garivier2016Optimal · LMLExplore 5113b88ad95f · LMLRoadmaps
 
 ### S1. Ordering of the optimal allocation of best arm identification
 
-For best arm identification with arms in exponential families with a common family (Identification
-3.4), at a vector of means `μ` with unique best arm `a`, prove that the optimal allocation is
-ordered like the means on the other arms: if `μ c ≤ μ b < μ a`, then `w*_c(μ) ≤ w*_b(μ)`
-[GK16, Proposition 6]. Find the most general form the argument supports: the pair cost
-`g_b(x) = d(μ_a, m_b(x)) + x d(μ_b, m_b(x))` decreases in `μ_b` for fixed `x`, so that
-`x_b(y) = g_b⁻¹(y)` increases in `μ_b`; the statement then holds for every family in which the
-divergence `d(μ_a, ·)` and `d(·, m)` have the monotonicity of Layer 1.4, and for Gaussian arms with
-a common variance it is explicit. Place it next to the scalar equation of Identification 3.4.
+For best arm identification with arms in an exponential family (as in
+`altCost_baiTask_restrict_eq_iInf_expFamilyPairCost`), at a vector of means `μ` of the family with
+unique best arm `a`, prove that the optimal allocation is ordered like the means on the other arms:
+for `b, c ≠ a`, `w*_c(μ) ≤ w*_b(μ) ↔ μ c ≤ μ b` and `w*_c(μ) < w*_b(μ) ↔ μ c < μ b`
+[GK16, Proposition 6]. Prove it for the `β`-optimal allocations of the Top Two algorithms too, for
+`β > 0` (strictly for `β ∈ (0, 1)`), of which the optimal allocation is the case `β = w*_a(μ)`.
+The equality of the pair costs at the optimal allocation [GK16, Lemma 4] gives it, with two
+monotonicity properties of the pair cost `w_a d(μ a, m) + w_b d(μ b, m)`, where `m` is the
+weighted mean: it increases in `w_b`, and it decreases in the lower mean `μ b ≤ μ a`, strictly for
+positive weights. The second goes next to `strictMonoOn_expFamilyPairCost` in
+`Probability/Distributions/ExponentialFamily/Mean.lean`, and the ordering next to the `β`-optimal
+allocations of best arm identification (`Identification/Task/TopTwo/BestArm.lean`). Gaussian arms
+with a common variance are a case.

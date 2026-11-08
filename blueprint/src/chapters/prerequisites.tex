@@ -17,12 +17,56 @@ not provide yet. Their Lean code goes to the library's \texttt{ForLMLExplore/} f
   LMLRoadmaps: Identification 3.4.
 \end{theorem}
 
+\begin{lemma}
+  \label{prereq:pair_cost_anti}
+  \lean{MeasureTheory.Measure.strictAntiOn_expFamilyPairCost_right,
+    MeasureTheory.Measure.antitoneOn_expFamilyPairCost_right}
+  \leanok
+  For an exponential family with divergence $d$, a mean $\mu_1$ of the family and nonnegative
+  weights $w_1, w_2$, the cost $w_1 d(\mu_1, m) + w_2 d(\mu_2, m)$ of moving $\mu_1$ and $\mu_2$ to
+  their weighted mean $m = (w_1\mu_1 + w_2\mu_2)/(w_1 + w_2)$ is nonincreasing in the mean
+  $\mu_2 \le \mu_1$ of the family. It is decreasing when $w_1, w_2 > 0$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  Let $\mu_2' < \mu_2 \le \mu_1$ and let $m'$ be the weighted mean of $\mu_1$ and $\mu_2'$, so that
+  $\mu_2' < m' \le \mu_1$. The pair cost of $(\mu_1, \mu_2)$ is the minimum of
+  $w_1 d(\mu_1, x) + w_2 d(\mu_2, y)$ over the means $x \le y$. If $\mu_2 \le m'$, take
+  $x = y = m'$: then $d(\mu_2, m') < d(\mu_2', m')$, since $d(\cdot, m')$ decreases below $m'$. If
+  $m' < \mu_2$, take $x = m'$ and $y = \mu_2$: then $d(\mu_2, \mu_2) = 0 < d(\mu_2', m')$. In both
+  cases the result is at most $w_1 d(\mu_1, m') + w_2 d(\mu_2', m')$, the pair cost of
+  $(\mu_1, \mu_2')$, and strictly less when $w_2 > 0$. If a weight vanishes, both costs are zero.
+\end{proof}
+
 \begin{theorem}
   \label{prereq:ordering}
-  For arms in an exponential family and a vector of means with unique best arm $a$, if
-  $\mu_c \le \mu_b < \mu_a$ then $w^*_c(\mu) \le w^*_b(\mu)$ \cite[Proposition 6]{GK16}. No
-  LMLRoadmaps target covers it yet.
+  \lean{LMLExplore.Identification.le_iff_le_of_mem_optAlloc_baiTask_restrict,
+    LMLExplore.Identification.lt_iff_lt_of_mem_optAlloc_baiTask_restrict,
+    LMLExplore.Identification.le_of_mem_betaOptAlloc_baiTask_restrict_of_le,
+    LMLExplore.Identification.lt_of_mem_betaOptAlloc_baiTask_restrict_of_lt}
+  \leanok
+  \uses{lem:equalize, prereq:pair_cost_anti}
+  For arms in an exponential family and a vector of means with unique best arm $a$, the optimal
+  allocation is ordered like the means on the arms other than $a$: for $b, c \ne a$,
+  $w^*_c(\mu) \le w^*_b(\mu)$ if and only if $\mu_c \le \mu_b$, and $w^*_c(\mu) < w^*_b(\mu)$ if
+  and only if $\mu_c < \mu_b$ \cite[Proposition 6]{GK16}. The same holds for the $\beta$-optimal
+  allocations, the maximizers of $D(\mu, w, \neg a)$ among the allocations with $w_a = \beta$: for
+  $\beta > 0$, and in the strict form for $\beta \in (0, 1)$. No LMLRoadmaps target covers it yet.
 \end{theorem}
+
+\begin{proof}
+  \leanok
+  \uses{lem:equalize, prereq:pair_cost_anti}
+  Let $w$ be $\beta$-optimal, so that the costs $C_b(w_b)$ of the pairs $(a, b)$, with
+  $C_b(x) = \beta d(\mu_a, m_b) + x d(\mu_b, m_b)$, are all equal (\cref{lem:equalize} and its
+  $\beta$ form). Let $b, c \ne a$ with $\mu_c \le \mu_b$. If $w_b < w_c$, then $C_b$ increases, so
+  $C_b(w_b) < C_b(w_c)$. By \cref{prereq:pair_cost_anti}, $C_b(w_c) \le C_c(w_c)$. This
+  contradicts $C_b(w_b) = C_c(w_c)$. If $\mu_c < \mu_b$ and $w_b \le w_c$, then
+  $C_b(w_b) \le C_b(w_c) < C_c(w_c)$, using $w_c > 0$, a contradiction again. The optimal
+  allocation is $\beta$-optimal for $\beta = w^*_a \in (0, 1)$; the two implications give the
+  equivalences.
+\end{proof}
 
 \begin{lemma}
   \label{prereq:kt}

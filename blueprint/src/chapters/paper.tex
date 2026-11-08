@@ -118,6 +118,10 @@ The paper states it for $\delta \in (0, 1)$, which is false beyond $1/2$
   $m_b = (\mu_a + x_b\mu_b)/(1 + x_b)$, such that
   $F(y) = \sum_{b \ne a} d(\mu_a, m_b) / d(\mu_b, m_b) = 1$. The paper writes $x_b = g_b^{-1}(y)$
   and computes the unique solution $y^*$ of $F(y) = 1$ by bisection.
+
+  This needs at least two arms, which the paper leaves implicit (erratum E3). With a single
+  arm, $F = 0$, while the allocation $(1)$ is optimal. The Lean statement omits the hypothesis
+  and is false. It is blocked until the hypothesis that there is an arm $b \ne a$ is added.
 \end{theorem}
 
 \begin{proof}
@@ -138,10 +142,13 @@ The paper states it for $\delta \in (0, 1)$, which is false beyond $1/2$
 \end{proposition}
 
 \begin{proof}
+  \leanok
   \uses{prereq:ordering}
   Parts (1) and (2) are in LMLExplore (\texttt{pos\_of\_mem\_optAlloc\_baiTask\_restrict},
-  \texttt{continuousAt\_of\_mem\_optAlloc\_baiTask\_restrict}), and their Lean statements here are
-  proved; part (3) is \cref{prereq:ordering}.
+  \texttt{continuousAt\_of\_mem\_optAlloc\_baiTask\_restrict}); part (3) is
+  \cref{prereq:ordering}. The paper proves part (3) with the scalar equation of
+  \cref{thm:scalar}. The proof here uses only \cref{lem:equalize} and the monotonicity of the
+  pair costs.
 \end{proof}
 
 \chapter{Track-and-Stop}

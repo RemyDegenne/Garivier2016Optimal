@@ -45,3 +45,26 @@ are numbered `E1`, `E2`, … and never renumbered.
   the existential `C`; the constant still depends neither on the family nor on the sampling rule.
 - **Kind:** wrong dependence of a constant, from an error in the last step of the proof.
 - **Found:** check of the statements against the paper, 2026-11-08.
+
+## E3. Theorem 5 needs at least two arms
+
+- **Where:** arXiv:1602.04589v2, Theorem 5 (Section 2.2, "About the Characteristic Time and the
+  Optimal Proportions"): "`w*_a(μ) = x_a(y*) / ∑_{a=1}^K x_a(y*)`, where `y*` is the unique
+  solution of the equation `F_μ(y) = 1`, and where
+  `F_μ : y ↦ ∑_{a=2}^K d(μ_1, (μ_1 + x_a(y) μ_a)/(1 + x_a(y))) / d(μ_a, (μ_1 + x_a(y) μ_a)/(1 + x_a(y)))`
+  is a continuous, increasing function on `[0, d(μ_1, μ_2)[` such that `F_μ(0) = 0` and
+  `F_μ(y) → ∞` when `y → d(μ_1, μ_2)`."
+- **Error:** the theorem does not hold for a single arm, `K = 1`. Then the sum defining `F_μ` is
+  empty, so `F_μ = 0` and `F_μ(y) = 1` has no solution, while the optimal allocation exists: it is
+  `w* = (1)`, since there are no alternatives. The paper leaves `K ≥ 2` implicit: the statement
+  refers to `μ_2`, which only exists when `K ≥ 2`.
+- **Correction:** state Theorem 5 for `K ≥ 2`. This issue does not affect the paper's argument
+  when `K ≥ 2`.
+- **Lean:** the frozen statement `Garivier2016Optimal.mem_optAlloc_iff_exists_scalar` has no
+  hypothesis that there is an arm `b ≠ a`, and is false. With one Gaussian arm of variance `1`,
+  the allocation `1` is optimal, and the right-hand side asks for an empty sum equal to `1`. Lean
+  checks a derivation of `False` from the statement (`notes/phase2-decisions.md`, round of
+  2026-11-08, Theorem 5). The statement needs the extra hypothesis `∃ b, b ≠ a`; until then it is
+  `blocked` in `formalization.yaml`.
+- **Kind:** missing hypothesis. The paper leaves it implicit, and the Lean statement omits it.
+- **Found:** round of 2026-11-08 (phase 2), while planning the proof of Theorem 5.

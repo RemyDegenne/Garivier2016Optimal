@@ -68,9 +68,15 @@ status:
     with D-tracking and with C-tracking are proved, as specializations of LMLExplore; Theorem 14
     needed the continuity of the cost of the alternatives near a model, which LMLExplore has as a
     private lemma (ForLMLExplore/Identification/Task/BestArm.lean, PAPER_ROADMAP.md R14); the
-    refactor pull request LeanMachineLearning/LMLExplore#242 makes it public. Left: Theorem 5,
-    Proposition 6 part 3, Theorem 10, Proposition 12 and Proposition 13.
-  sorry_count: 5
+    refactor pull request LeanMachineLearning/LMLExplore#242 makes it public.
+    Phase 2, round of 2026-11-08 (the optimal allocation): Proposition 6 part 3 is proved, from the
+    ordering of the optimal and β-optimal allocations of best arm identification like the means
+    (ForLMLExplore/Identification/Task/BestArmOrder.lean, PAPER_ROADMAP.md R7), proved from
+    Lemma 4 and the monotonicity of the pair costs, without the scalar equation. Theorem 5 is
+    blocked: as stated, it is false for a single arm (erratum E3), and needs the hypothesis that
+    there is an arm b ≠ a. Left: Theorem 10, Proposition 12 and Proposition 13, and Theorem 5
+    once its statement is corrected.
+  sorry_count: 4
   sorry_in_definitions: 0
 
 alignment:
@@ -98,9 +104,13 @@ alignment:
     - source: "thm:scalar — Theorem 5, the optimal allocation from a scalar equation"
       lean: "Garivier2016Optimal.mem_optAlloc_iff_exists_scalar"
       module: "Garivier2016Optimal.GK2016.Theorem5"
-      status: "stated"
+      status: "blocked"
       relation: "closeMatch"
-      note: "Equation form: weights x with x_a = 1 and equal pair costs y, instead of x_b = g_b⁻¹(y)."
+      erratum: "E3"
+      note: >-
+        Equation form: weights x with x_a = 1 and equal pair costs y, instead of x_b = g_b⁻¹(y).
+        Blocked: false as stated for a single arm, where the sum F is empty (erratum E3); it needs
+        the hypothesis that there is an arm b ≠ a.
     - source: "prop:optalloc — Proposition 6, part 1, positivity"
       lean: "Garivier2016Optimal.pos_of_mem_optAlloc"
       module: "Garivier2016Optimal.GK2016.Proposition6"
@@ -114,7 +124,7 @@ alignment:
     - source: "prop:optalloc — Proposition 6, part 3, ordering"
       lean: "Garivier2016Optimal.le_of_mem_optAlloc_of_le"
       module: "Garivier2016Optimal.GK2016.Proposition6"
-      status: "stated"
+      status: "proved"
       relation: "hasPart"
     - source: "thm:kt — Theorem 10, informational threshold for Bernoulli arms"
       lean: "Garivier2016Optimal.measureReal_glrt_bernoulli_le"

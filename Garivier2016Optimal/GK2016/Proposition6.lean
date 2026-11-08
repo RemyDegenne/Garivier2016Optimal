@@ -5,7 +5,7 @@ Authors: Remy Degenne
 -/
 module
 
-public import LMLExplore.Identification.Task.BestArm
+public import Garivier2016Optimal.ForLMLExplore.Identification.Task.BestArmOrder
 
 /-!
 # Properties of the optimal allocation [GK16, Proposition 6]
@@ -21,7 +21,10 @@ For best arm identification on the vectors of means of an exponential family, at
 
 The paper writes part 3 for sorted means, `μ_1 > μ_2 ≥ ⋯ ≥ μ_K` giving `w*_2 ≥ ⋯ ≥ w*_K`. Parts 1
 and 2 are in LMLExplore (`pos_of_mem_optAlloc_baiTask_restrict`,
-`continuousAt_of_mem_optAlloc_baiTask_restrict`); part 3 is not on any LMLRoadmaps target.
+`continuousAt_of_mem_optAlloc_baiTask_restrict`); part 3 is not on any LMLRoadmaps target, and is
+the specialization of `LMLExplore.Identification.le_iff_le_of_mem_optAlloc_baiTask_restrict`
+(`ForLMLExplore/Identification/Task/BestArmOrder.lean`), which also gives the converse and the
+strict form.
 
 ## Main statements
 
@@ -75,13 +78,17 @@ theorem continuousAt_of_mem_optAlloc (hρ : ∀ c, ¬ id =ᵐ[ρ] fun _ ↦ c)
 /-- **The optimal allocation is ordered like the means** [GK16, Proposition 6, part 3]. For arms
 in the exponential family `(ρ, id)` and a vector of means `μ` of the family with unique best arm
 `a`, an arm whose mean is larger, closer to the best, gets a larger optimal proportion: if
-`μ c ≤ μ b` for two arms `b, c ≠ a`, then `w c ≤ w b`. -/
+`μ c ≤ μ b` for two arms `b, c ≠ a`, then `w c ≤ w b`. The proof does not go through the scalar
+equation of [GK16, Theorem 5], as the paper's does: it only uses the equality of the costs of the
+pairs [GK16, Lemma 4] and their monotonicity in the weight and in the mean of the other arm. -/
 theorem le_of_mem_optAlloc_of_le (hρ : ∀ c, ¬ id =ᵐ[ρ] fun _ ↦ c)
     (hν : ∀ μ' b, ν μ' b = ρ.expFamily id (ρ.natParam id (μ' b)))
     (hμ : ∀ b, μ b ∈ ρ.expFamilyMeans id) (ha : ∀ b ≠ a, μ b < μ a) {w : α → ℝ}
     (hw : w ∈ ((baiTask ν id).restrict {μ' | ∀ b, μ' b ∈ ρ.expFamilyMeans id}).optAlloc μ a)
     {b c : α} (hb : b ≠ a) (hc : c ≠ a) (hbc : μ c ≤ μ b) :
-    w c ≤ w b := by
-  sorry
+    w c ≤ w b :=
+  (le_iff_le_of_mem_optAlloc_baiTask_restrict ν hρ hμ
+    (fun μ' hμ' c ↦ by rw [hν, hν]; exact Measure.klDiv_expFamily_natParam (hμ c) (hμ' c)) ha hw
+    hb hc).2 hbc
 
 end Garivier2016Optimal
