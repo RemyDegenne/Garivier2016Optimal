@@ -100,7 +100,7 @@ Decisions taken in the unattended rounds of `scripts/formalize.sh`, by date.
   hypothesis that there is an arm other than `a`, and it is false for a single arm. The
   allocation `1` is optimal, since there are no alternatives and `D(μ, w, ¬a) = ⊤` for every `w`.
   The right-hand side asks for an empty sum equal to `1`. The paper leaves `K ≥ 2` implicit
-  (`notes/paper-errata.md`, E3). The following file compiled with `lake env lean` against the
+  (`notes/statement-corrections.md`, Theorem 5). The following file compiled with `lake env lean` against the
   library of this commit. It derives `False` from the statement, which is proved with `sorry`:
 
   ```lean
@@ -141,7 +141,7 @@ Decisions taken in the unattended rounds of `scripts/formalize.sh`, by date.
   ```
 
   The statements are frozen, so this round changes neither the statement nor its challenge. It
-  sets the status of Theorem 5 to `blocked` in `formalization.yaml`, with the erratum E3, and
+  sets the status of Theorem 5 to `blocked` in `formalization.yaml`, with its statement correction, and
   leaves the decision to the user. The fix is the extra hypothesis `∃ b, b ≠ a` (or
   `Nontrivial α`), with a regenerated challenge. With it, the statement is expected to hold
   (not checked in Lean): `⇒` by a first-order optimality argument at the optimal allocation, `⇐`

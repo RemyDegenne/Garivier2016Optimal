@@ -29,8 +29,8 @@ Paper: RemyDegenne/Garivier2016Optimal · LMLExplore 5113b88ad95f · LMLRoadmaps
 - R5: Identification 3.4 asks for the scalar equation whenever the inner infimum has a unique
   minimizer for all weights, in particular for a common family and for Gaussian arms with
   arm-dependent known variances, not only for one exponential family as in the paper.
-- R5: the paper's Theorem 5 is false for a single arm (`notes/paper-errata.md`, E3), so the
-  library statement needs an arm `b ≠ a`, as `betaAnswerValue_baiTask_restrict_pos` does.
+- R5: Theorem 5 needs at least two arms, which the paper leaves implicit
+  (`notes/statement-corrections.md`), so the library statement needs an arm `b ≠ a`, as `betaAnswerValue_baiTask_restrict_pos` does.
 - R6: continuity is `LMLExplore.Identification.continuousAt_of_mem_optAlloc_baiTask_restrict`.
 - R7: proved without the scalar equation of R5, from the equality of the pair costs at the
   optimal allocation [GK16, Lemma 4] and two monotonicity properties of the pair cost: it

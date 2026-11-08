@@ -72,9 +72,9 @@ status:
     Phase 2, round of 2026-11-08 (the optimal allocation): Proposition 6 part 3 is proved, from the
     ordering of the optimal and β-optimal allocations of best arm identification like the means
     (ForLMLExplore/Identification/Task/BestArmOrder.lean, PAPER_ROADMAP.md R7), proved from
-    Lemma 4 and the monotonicity of the pair costs, without the scalar equation. Theorem 5 is
-    blocked: as stated, it is false for a single arm (erratum E3), and needs the hypothesis that
-    there is an arm b ≠ a.
+    Lemma 4 and the monotonicity of the pair costs, without the scalar equation. The Lean statement
+    of Theorem 5 was false for a single arm; by the decision of 2026-11-08 it assumes an arm
+    b ≠ a, which the paper leaves implicit (notes/statement-corrections.md).
     Phase 2, round of 2026-11-08 (the almost sure upper bound): Proposition 13 is proved, from the
     almost sure sample complexity of the GLRT for any task, estimator and thresholds
     log(1/δ) + o(t) (ForLMLExplore/Identification/AlmostSure.lean, PAPER_ROADMAP.md R11) and the
@@ -109,13 +109,11 @@ alignment:
     - source: "thm:scalar — Theorem 5, the optimal allocation from a scalar equation"
       lean: "Garivier2016Optimal.mem_optAlloc_iff_exists_scalar"
       module: "Garivier2016Optimal.GK2016.Theorem5"
-      status: "blocked"
+      status: "stated"
       relation: "closeMatch"
-      erratum: "E3"
       note: >-
         Equation form: weights x with x_a = 1 and equal pair costs y, instead of x_b = g_b⁻¹(y).
-        Blocked: false as stated for a single arm, where the sum F is empty (erratum E3); it needs
-        the hypothesis that there is an arm b ≠ a.
+        For at least two arms, which the paper leaves implicit (notes/statement-corrections.md).
     - source: "prop:optalloc — Proposition 6, part 1, positivity"
       lean: "Garivier2016Optimal.pos_of_mem_optAlloc"
       module: "Garivier2016Optimal.GK2016.Proposition6"

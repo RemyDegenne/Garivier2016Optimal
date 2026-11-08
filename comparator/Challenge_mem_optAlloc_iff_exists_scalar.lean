@@ -13,6 +13,12 @@ set_option autoImplicit false
 set_option relaxedAutoImplicit false
 
 -- Namespace stubs (so later `open`s resolve).
+namespace MeasureTheory
+end MeasureTheory
+namespace LMLExplore
+end LMLExplore
+namespace LMLExplore.Identification
+end LMLExplore.Identification
 namespace Garivier2016Optimal
 end Garivier2016Optimal
 
@@ -24,15 +30,16 @@ open scoped ENNReal NNReal
 namespace Garivier2016Optimal
 variable {α : Type*} [Fintype α] [DecidableEq α] {mα : MeasurableSpace α} (ν : (α → ℝ) → Kernel α ℝ) [∀ μ, IsMarkovKernel (ν μ)] (ρ : Measure ℝ) {μ : α → ℝ} {a : α}
 
-/-- **The optimal allocation solves a scalar equation** [GK16, Theorem 5]. For arms in the
-exponential family `(ρ, id)` with divergence `d = ρ.expFamilyDiv id` and a vector of means `μ` of
-the family with unique best arm `a`, an allocation `w` is optimal if and only if `w = x / ∑ x` for
-weights `x` with `x a = 1` and, for some `y` and every arm `b ≠ a`, `x b > 0` and
+/-- **The optimal allocation solves a scalar equation** [GK16, Theorem 5]. For at least two arms
+in the exponential family `(ρ, id)` with divergence `d = ρ.expFamilyDiv id` and a vector of means
+`μ` of the family with unique best arm `a`, an allocation `w` is optimal if and only if
+`w = x / ∑ x` for weights `x` with `x a = 1` and, for some `y` and every arm `b ≠ a`, `x b > 0` and
 `d(μ a, m_b) + x b d(μ b, m_b) = y` with `m_b = (μ a + x b μ b) / (1 + x b)`, such that
 `∑_{b ≠ a} d(μ a, m_b) / d(μ b, m_b) = 1`. -/
 theorem mem_optAlloc_iff_exists_scalar (hρ : ∀ c, ¬ id =ᵐ[ρ] fun _ ↦ c)
     (hν : ∀ μ' b, ν μ' b = ρ.expFamily id (ρ.natParam id (μ' b)))
-    (hμ : ∀ b, μ b ∈ ρ.expFamilyMeans id) (ha : ∀ b ≠ a, μ b < μ a) {w : α → ℝ} :
+    (hμ : ∀ b, μ b ∈ ρ.expFamilyMeans id) (ha : ∀ b ≠ a, μ b < μ a) (hb : ∃ b, b ≠ a)
+    {w : α → ℝ} :
     w ∈ ((baiTask ν id).restrict {μ' | ∀ b, μ' b ∈ ρ.expFamilyMeans id}).optAlloc μ a ↔
       ∃ (y : ℝ) (x : α → ℝ), x a = 1 ∧
         (∀ b ≠ a, 0 < x b ∧

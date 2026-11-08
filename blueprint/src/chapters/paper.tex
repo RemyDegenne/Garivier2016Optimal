@@ -112,16 +112,15 @@ The paper states it for $\delta \in (0, 1)$, which is false beyond $1/2$
   \lean{Garivier2016Optimal.mem_optAlloc_iff_exists_scalar}
   \leanok
   \uses{lem:equalize, prereq:scalar}
-  For $\mu \in \cS$ with best arm $a$, an allocation $w$ is optimal if and only if
+  Let $K \ge 2$. For $\mu \in \cS$ with best arm $a$, an allocation $w$ is optimal if and only if
   $w = x / \sum_c x_c$ for weights $x$ with $x_a = 1$ and, for some $y$ and every $b \ne a$,
   $x_b > 0$ and $g_b(x_b) = d(\mu_a, m_b) + x_b d(\mu_b, m_b) = y$ with
   $m_b = (\mu_a + x_b\mu_b)/(1 + x_b)$, such that
   $F(y) = \sum_{b \ne a} d(\mu_a, m_b) / d(\mu_b, m_b) = 1$. The paper writes $x_b = g_b^{-1}(y)$
   and computes the unique solution $y^*$ of $F(y) = 1$ by bisection.
 
-  This needs at least two arms, which the paper leaves implicit (erratum E3). With a single
-  arm, $F = 0$, while the allocation $(1)$ is optimal. The Lean statement omits the hypothesis
-  and is false. It is blocked until the hypothesis that there is an arm $b \ne a$ is added.
+  The paper leaves $K \ge 2$ implicit. With a single arm, $F = 0$, while the allocation $(1)$ is
+  optimal (\texttt{notes/statement-corrections.md}).
 \end{theorem}
 
 \begin{proof}

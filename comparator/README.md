@@ -6,8 +6,9 @@ without having to read or trust the Lean development in `Garivier2016Optimal/`.
 
 **Status.** The statements were set up on 2026-11-08, at the end of phase 1. Seven challenges are
 proved in the project (Theorem 1, Remark 2, Proposition 6 parts 1, 2 and 3, Theorem 14 with D- and
-C-tracking) and four are not yet. One of these four, Theorem 5, is blocked: as stated it is false
-for a single arm (erratum E3 in `notes/paper-errata.md`). Comparator has not been run on them.
+C-tracking) and four are not yet. Theorem 5's challenge was regenerated on 2026-11-08 with the
+hypothesis of a second arm (`notes/statement-corrections.md`). Comparator has not been run on
+them.
 
 Each challenge is one file that imports LMLExplore and Mathlib modules only, no project modules
 and no sibling helpers.
