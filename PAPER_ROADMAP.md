@@ -16,9 +16,9 @@ Paper: RemyDegenne/Garivier2016Optimal · LMLExplore 5113b88ad95f · LMLRoadmaps
 | R8 | C-tracking and D-tracking guarantees [GK16, Lemmas 7, 8, 15, 17, Proposition 9] | exists | `LMLExplore.Identification.CTracking.tendsto_pullCount_div` | – | |
 | R9 | The Krichevsky–Trofimov mixture and the informational threshold for Bernoulli arms [GK16, Lemma 11, Theorem 10] | target | Identification 4.2 | todo | `ForLMLExplore/Identification/KTThreshold.lean` |
 | R10 | The deviational thresholds `log(C t^α/δ)` [GK16, Proposition 12] | target | Identification 4.2 | todo | `ForLMLExplore/Identification/DeviationalThreshold.lean` |
-| R11 | The almost sure sample complexity bound of the GLRT [GK16, Proposition 13] | target | Identification 4.4 | todo | `ForLMLExplore/Identification/AlmostSure.lean` |
+| R11 | The almost sure sample complexity bound of the GLRT [GK16, Proposition 13] | target | Identification 4.4 | proved | `ForLMLExplore/Identification/AlmostSure.lean`, `ForLMLExplore/SequentialLearning/SumRewards.lean` |
 | R12 | Expected sample complexity of Track-and-Stop [GK16, Theorem 14, Lemmas 19, 20] | exists | `LMLExplore.Identification.IdentTask.eventually_expectedStoppingTime_trackAndStop_le_of_charTime_lt` | – | |
-| R13 | The paper's statements, specializing the items above to its setting | paper | | todo | `GK2016/Theorem1.lean`, `GK2016/Theorem5.lean`, `GK2016/Proposition6.lean`, `GK2016/Theorem10.lean`, `GK2016/Proposition12.lean`, `GK2016/Proposition13.lean`, `GK2016/Theorem14.lean` |
+| R13 | The paper's statements, specializing the items above to its setting | paper | | todo | `GK2016/Basic.lean`, `GK2016/Theorem1.lean`, `GK2016/Theorem5.lean`, `GK2016/Proposition6.lean`, `GK2016/Theorem10.lean`, `GK2016/Proposition12.lean`, `GK2016/Proposition13.lean`, `GK2016/Theorem14.lean` |
 | R14 | Continuity of the cost of the alternatives of best arm identification near a model, and openness of its answer sets, for arms in an exponential family | refactor | `LMLExplore.Identification.continuousWithinAt_altCost_baiTask_restrict` | PR #242 | `ForLMLExplore/Identification/Task/BestArm.lean` |
 
 ## Notes
@@ -54,6 +54,19 @@ Paper: RemyDegenne/Garivier2016Optimal · LMLExplore 5113b88ad95f · LMLRoadmaps
 - R11: Identification 4.4 states it for any statistic with thresholds `log(1/δ) + o(t)`, any
   estimator converging almost surely and proportions converging to a set `W` of allocations, with
   every `c > (inf_{w ∈ W} D(θ, w, ¬i))⁻¹`; the paper's `α T*(μ)` is a case.
+  `ForLMLExplore/Identification/AlmostSure.lean` proves it so, for the plug-in statistic of any
+  estimator into a topological space of models, a compact `W` with `D(·, ·, ¬i)` lower
+  semicontinuous at `{θ} × W`, as in `IdentTask.eventually_expectedStoppingTime_cTrackAndStop_le`
+  (`IdentTask.ae_eventually_stoppingTime_glrt_le`), with almost sure stopping when the infimum is
+  positive (`IdentTask.ae_stoppingTime_glrt_ne_top`). The file is a new LMLExplore file
+  `Identification/AlmostSure.lean`, after `Identification/TrackAndStop.lean`; its
+  `log_div_le_log_one_div_add_log` and `eventually_log_le_mul_of_isBigO` are the inline steps of
+  `IdentTask.eventually_expectedStoppingTime_glrt_le_of_isBigO`, which can then use them. The
+  strong law of large numbers for the empirical means of a run
+  (`ae_tendsto_empMean_of_tendsto_pullCount`, from LML's i.i.d. rewards by count) is the
+  prerequisite that turns proportions bounded away from zero into the almost sure convergence of
+  the empirical means; it goes to LMLExplore's `SequentialLearning/SumRewards.lean`.
+  Identification 5.2 asks for the almost sure version of Track-and-Stop's optimality through it.
 - R12: LMLExplore proves `𝔼[τ_δ] ≤ c log(1/δ)` for every `c > T*(μ)`, stronger than the paper's
   `α T*(μ)`; the C-tracking form is
   `LMLExplore.Identification.IdentTask.eventually_expectedStoppingTime_cTrackAndStop_le_of_charTime_lt`.

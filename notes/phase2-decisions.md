@@ -152,3 +152,58 @@ Decisions taken in the unattended rounds of `scripts/formalize.sh`, by date.
   an approval. Also run: `lake exe runLinter Garivier2016Optimal`, `#print axioms` of the new
   results (only `propext`, `Classical.choice` and `Quot.sound`), `leanblueprint pdf`,
   `leanblueprint web`, `lake exe checkdecls blueprint/lean_decls` and `lake build Comparator`.
+
+## 2026-11-08: the almost sure upper bound (Proposition 13)
+
+- **Job and area.** Advance. Tag, Refresh and Refactor pull request did not apply: LMLRoadmaps
+  `main` is still `d01bdd6b89ce`, and the paper's only pull request, LMLExplore#242 (R14), is
+  open with status `PR #242`. The area is the sample complexity chapter, where Proposition 13 was
+  left (PAPER_ROADMAP.md R11). Its prerequisites in LMLExplore and in this repository were proved:
+  the positivity of the optimal allocation, the continuity of the costs (R14) and the
+  recommendation near `μ`. Theorem 10 and Proposition 12 need new deviation inequalities (the
+  Krichevsky–Trofimov mixture, the union bound of [GK16, Appendix C]), a larger area.
+- **Generality of R11.** Identification 4.4 asks for the almost sure reduction "with the same
+  statistic, recommendation and thresholds" as its expectation version. It is stated so: for any
+  task, the plug-in statistic of any estimator into a topological space of models, a compact set
+  `W` of allocations with `D(·, ·, ¬i)` lower semicontinuous at `{θ} × W`, the recommendation `i`
+  near `θ`, and thresholds `β δ t h ≤ log (1 / δ) + f t` with `f t = o(t)`. The proportions
+  approach `W` in the sense `Tendsto (N(t) / t) atTop (𝓝ˢ W)`, the filter that
+  `IdentTask.eventually_expectedStoppingTime_cTrackAndStop_le` uses for the targets. It is split
+  into a pathwise statement on the stopping time, given the linear growth of the statistic along
+  one sequence of histories, the linear growth of the plug-in statistic from the convergences, and
+  the almost sure statements, which apply both pathwise. The rate statement quantifies over every
+  `c > (inf_{w ∈ W} D(θ, w, ¬i))⁻¹` inside the almost sure event. Finiteness needs a positive
+  infimum and holds at every `δ` of a set on which the thresholds have this form, for the paper
+  `δ ∈ (0, 1)`.
+- **The strong law for the empirical means.** LMLExplore had no almost sure convergence of the
+  empirical means. LML's rewards by count, on `P.prod (streamMeasure ν)`, are i.i.d. with law
+  `ν a` for each arm `a`, and their partial sums are the sums of rewards. Mathlib's
+  `strong_law_ae_real` then gives the convergence on the product space, and
+  `Measure.ae_ae_of_ae_prod` brings it back to `P`, since the event depends on the first
+  coordinate only. The result goes to `ForLMLExplore/SequentialLearning/SumRewards.lean`, the path
+  of LMLExplore's file on the empirical means of runs, and is part of R11, whose almost sure
+  statements it serves. No LMLRoadmaps item names it, but Identification 5.2 asks for the almost
+  sure optimality of Track-and-Stop, which needs it.
+- **The paper's statement.** `W = {w}`, the estimator is the vector of empirical means, which
+  converges almost surely because `N_b(t) / t → w b > 0` [GK16, Proposition 6] makes every arm
+  pulled infinitely often. `D(μ, w, ¬a) = T*(μ)⁻¹` at the optimal allocation, and it is positive.
+  The proof gives `limsup ≤ T*(μ)`, which is stronger than `p T*(μ)`: of `p ∈ [1, e / 2]`, only
+  `1 ≤ p` is used.
+- **The unused `[Nonempty α]`.** The frozen statement has the instance `[Nonempty α]`, which the
+  proof does not use. As a section variable, it raised the `unusedSectionVars` warning, which
+  `scripts/check-build.sh` rejects, and omitting it would change the statement. The section
+  variables from `[Nonempty α]` on became binders of the theorem, in the same order, so that the
+  type is the same. A scratch file checked that the type is the same `Expr` as that of the
+  comparator challenge, with the same universe names. The theorem has
+  `@[nolint unusedArguments]`, since `lake exe runLinter` reports the unused instance otherwise.
+- **Shared helpers.** The four private lemmas of `GK2016/Theorem14.lean` that meet the paper's
+  setting with LMLExplore's hypotheses (`limsup_div_log_le`, `eventually_mem_M_and_rec_eq`,
+  `klDiv_eq_expFamilyDiv`, `mgfDominatedOn_expFamily`) are needed by Proposition 13 too. They
+  moved, unchanged and public, to `GK2016/Basic.lean`, which both files import. They name the
+  paper's setting, so they stay in the paper's folder.
+- **Checks.** `scripts/check-build.sh` (3 declarations use `sorry`, no other warning),
+  `lake exe runLinter Garivier2016Optimal`, `scripts/check-forlmlexplore.sh`,
+  `python3 scripts/check-blueprint.py`, `#print axioms` of Proposition 13 (only `propext`,
+  `Classical.choice` and `Quot.sound`), `leanblueprint pdf`, `leanblueprint web` and
+  `lake exe checkdecls blueprint/lean_decls`. No definition in the closure of a headline
+  statement changed, so `lake build Comparator` was not needed.

@@ -5,8 +5,7 @@ Authors: Remy Degenne
 -/
 module
 
-public import LMLExplore.Identification.TrackAndStop
-public import Garivier2016Optimal.ForLMLExplore.Identification.Task.BestArm
+public import Garivier2016Optimal.GK2016.Basic
 
 /-!
 # Asymptotic optimality of Track-and-Stop in expectation [GK16, Theorem 14]
@@ -56,62 +55,6 @@ variable {α : Type*} [Fintype α] [DecidableEq α] [Nonempty α] {mα : Measura
       ((baiTask ν id).restrict {μ' | ∀ a, μ' a ∈ ρ.expFamilyMeans id}).glr
         (((baiTask ν id).restrict {μ' | ∀ a, μ' a ∈ ρ.expFamilyMeans id}).plugInCost empMean')
         n h (rec (empMean' n h))}}
-
-/-- The bounds `f δ ≤ c log (1 / δ)` for all small enough `δ`, for every `c > t`, give
-`limsup_{δ → 0} f δ / log (1 / δ) ≤ t`, the form in which [GK16, Theorem 14] states them. -/
-private lemma limsup_div_log_le {f : ℝ → ℝ≥0∞} {t : ℝ≥0∞}
-    (h : ∀ c : ℝ≥0, t < c → ∀ᶠ δ in 𝓝[>] 0, f δ ≤ c * ENNReal.ofReal (log (1 / δ))) :
-    limsup (fun δ ↦ f δ / ENNReal.ofReal (log (1 / δ))) (𝓝[>] 0) ≤ t := by
-  refine le_of_forall_gt_imp_ge_of_dense fun c hc ↦ ?_
-  obtain ⟨c', hc', hc'c⟩ := ENNReal.lt_iff_exists_nnreal_btwn.1 hc
-  exact (limsup_le_of_le (h := (h c' hc').mono fun δ hδ ↦ ENNReal.div_le_of_le_mul hδ)).trans
-    hc'c.le
-
-omit [Fintype α] [DecidableEq α] [Nonempty α] [MeasurableSingletonClass α] in
-/-- Near a vector of means `μ` of the family with unique best arm `a`, the vectors of means are
-models of the task, and the recommendation is their unique best arm `a`. -/
-private lemma eventually_mem_M_and_rec_eq [Finite α] (hρ : ∀ c, ¬ id =ᵐ[ρ] fun _ ↦ c)
-    (hrec_best : ∀ μ' ∈ ((baiTask ν id).restrict {μ' | ∀ a, μ' a ∈ ρ.expFamilyMeans id}).M,
-      ∀ b ≠ rec μ', μ' b < μ' (rec μ'))
-    {a : α} (hμ : ∀ b, μ b ∈ ρ.expFamilyMeans id) (ha : ∀ b ≠ a, μ b < μ a) :
-    ∀ᶠ μ' in 𝓝 μ, μ' ∈ ((baiTask ν id).restrict {μ' | ∀ a, μ' a ∈ ρ.expFamilyMeans id}).M ∧
-      rec μ' = a := by
-  have h_mem :
-      μ ∈ ((baiTask ν id).restrict {μ' | ∀ a, μ' a ∈ ρ.expFamilyMeans id}).answerSet a := by
-    rw [IdentTask.answerSet_restrict]
-    exact ⟨(mem_answerSet_baiTask_iff ν id).2 ha, hμ⟩
-  have hS : IsOpen {μ' : α → ℝ | ∀ a, μ' a ∈ ρ.expFamilyMeans id} := by
-    rw [Set.ofPred_forall]
-    exact isOpen_iInter_of_finite fun c ↦
-      (Measure.isOpen_expFamilyMeans hρ).preimage (continuous_apply c)
-  filter_upwards [(isOpen_answerSet_baiTask_restrict ν hS a).mem_nhds h_mem] with μ' hμ'
-  have h_best := hμ'
-  rw [IdentTask.answerSet_restrict, Set.mem_inter_iff, mem_answerSet_baiTask_iff] at h_best
-  rw [IdentTask.mem_answerSet_iff] at hμ'
-  refine ⟨hμ'.1, ?_⟩
-  by_contra h
-  exact lt_asymm (h_best.1 _ h) (hrec_best μ' hμ'.1 a (Ne.symm h))
-
-omit [Fintype α] [DecidableEq α] [Nonempty α] [MeasurableSingletonClass α]
-  [∀ μ, IsMarkovKernel (ν μ)] in
-/-- For arms in the exponential family `(ρ, id)`, the divergence between the arms `b` of two
-vectors of means of the family is `d(μ₁ b, μ₂ b)`, the hypothesis on the arms of the results of
-`LMLExplore.Identification` on best arm identification. -/
-private lemma klDiv_eq_expFamilyDiv (hν : ∀ μ' b, ν μ' b = ρ.expFamily id (ρ.natParam id (μ' b)))
-    (μ₁ μ₂ : α → ℝ) (h₁ : ∀ b, μ₁ b ∈ ρ.expFamilyMeans id) (h₂ : ∀ b, μ₂ b ∈ ρ.expFamilyMeans id)
-    (b : α) : klDiv (ν μ₁ b) (ν μ₂ b) = ENNReal.ofReal (ρ.expFamilyDiv id (μ₁ b) (μ₂ b)) := by
-  rw [hν, hν]
-  exact Measure.klDiv_expFamily_natParam (h₁ b) (h₂ b)
-
-omit [Fintype α] [DecidableEq α] [Nonempty α] [MeasurableSingletonClass α] in
-/-- For arms in the exponential family `(ρ, id)`, each arm is dominated by the member of the family
-with its mean, the hypothesis on the arms of the sample complexity bounds of Track-and-Stop. -/
-private lemma mgfDominatedOn_expFamily
-    (hν : ∀ μ' b, ν μ' b = ρ.expFamily id (ρ.natParam id (μ' b))) (b : α) :
-    MGFDominatedOn id (((baiTask ν id).restrict {μ' | ∀ a, μ' a ∈ ρ.expFamilyMeans id}).ν μ b) id
-      (ρ.expFamily id (ρ.natParam id (μ b))) Set.univ := by
-  rw [IdentTask.ν_restrict, ν_baiTask, hν]
-  exact ⟨fun _ _ hY ↦ hY, fun _ _ _ ↦ le_rfl⟩
 
 /-- **Asymptotic optimality of Track-and-Stop with D-tracking** [GK16, Theorem 14]. Let the arms be
 in the exponential family `(ρ, id)`, the targets `w μ'` be optimal allocations and `rec μ'` the best

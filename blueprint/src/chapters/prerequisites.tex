@@ -110,10 +110,75 @@ not provide yet. Their Lean code goes to the library's \texttt{ForLMLExplore/} f
 \end{proof}
 
 \begin{lemma}
+  \label{prereq:as_pathwise}
+  \lean{LMLExplore.Identification.IdentTask.stoppingTime_glrt_ne_top_of_eventually_mul_le_glr,
+    LMLExplore.Identification.IdentTask.eventually_stoppingTime_glrt_le_of_eventually_mul_le_glr}
+  \leanok
+  Along a sequence of histories on which the GLR statistic of the recommended answer after $t$
+  rounds is at least $\kappa t$ for all large $t$, consider the GLRTs with thresholds
+  $\beta_t(h, \delta) \le \log(1/\delta) + f(t)$, $f(t) = o(t)$. If $\kappa > 0$, the GLRT stops
+  at every $\delta$ at which the thresholds have this form, and $\tau_\delta \le c \log(1/\delta)$
+  for all small $\delta$, for every $c > 1/\kappa$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  Take $1/c < \eta < \kappa$ and $L = \log(1/\delta)$. From the round $N = \max(M, \lceil L/\eta
+  \rceil)$ on, for a fixed $M$, the threshold is at most $L + (\kappa - \eta) N / 2 < \kappa N$, so
+  that $\tau_\delta \le N \le M + L/\eta + 1$, which is at most $cL$ when $L$ is large.
+\end{proof}
+
+\begin{lemma}
+  \label{prereq:glr_growth}
+  \lean{LMLExplore.Identification.IdentTask.eventually_mul_le_glr_plugInCost}
+  \leanok
+  Let $W$ be a compact set of allocations such that $(\theta', w) \mapsto D(\theta', w, \neg i)$ is
+  lower semicontinuous at $(\theta, w)$ on the simplex for every $w \in W$, and let the
+  recommendation be $i$ near $\theta$. Along a sequence of histories on which the estimates
+  converge to $\theta$ and the proportions of pulls $N(t)/t$ approach $W$, the GLR statistic of the
+  plug-in statistic, $t D(\hat\theta_t, N(t)/t, \neg i)$, is at least $\kappa t$ for all large $t$,
+  for every $\kappa < \inf_{w \in W} D(\theta, w, \neg i)$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  By compactness of $W$ and lower semicontinuity, $D(\theta', w', \neg i) > \kappa$ for $\theta'$
+  near $\theta$ and $w'$ in the simplex near $W$, which $\hat\theta_t$ and $N(t)/t$ are for all
+  large $t$.
+\end{proof}
+
+\begin{lemma}
   \label{prereq:as}
+  \lean{LMLExplore.Identification.IdentTask.ae_eventually_stoppingTime_glrt_le,
+    LMLExplore.Identification.IdentTask.ae_stoppingTime_glrt_ne_top}
+  \leanok
+  \uses{prereq:as_pathwise, prereq:glr_growth}
   For the GLRT with thresholds $\beta_t(h, \delta) \le \log(1/\delta) + f(t)$, $f(t) = o(t)$, if
   almost surely the estimates converge to the model and the proportions of pulls to a set $W$ of
   allocations, then almost surely $\tau_\delta \le c \log(1/\delta)$ for all small $\delta$, for
-  every $c > (\inf_{w \in W} D(\mu, w, \neg a^*))^{-1}$ \cite[Proposition 13]{GK16}.
-  LMLRoadmaps: Identification 4.4.
+  every $c > (\inf_{w \in W} D(\mu, w, \neg a^*))^{-1}$ \cite[Proposition 13]{GK16}. If the
+  infimum is positive, the GLRT stops almost surely at every $\delta$ at which the thresholds have
+  this form. LMLRoadmaps: Identification 4.4.
 \end{lemma}
+
+\begin{proof}
+  \leanok
+  \uses{prereq:as_pathwise, prereq:glr_growth}
+  On the almost sure event of the convergences, \cref{prereq:glr_growth} gives the linear growth
+  of the statistic, and \cref{prereq:as_pathwise} the bounds on the stopping time.
+\end{proof}
+
+\begin{lemma}
+  \label{prereq:slln}
+  \lean{LMLExplore.ae_tendsto_empMean_of_tendsto_pullCount}
+  \leanok
+  In a run of any algorithm against a stochastic bandit with integrable rewards, almost surely the
+  empirical mean of every arm pulled infinitely often converges to the mean of the arm.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  The rewards of the successive pulls of an arm are i.i.d.\ with the law of the arm (in LML), and
+  after $N_a(t)$ pulls the empirical mean is the mean of the first $N_a(t)$ of them: the strong law
+  of large numbers applies.
+\end{proof}

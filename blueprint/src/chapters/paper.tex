@@ -245,8 +245,16 @@ The paper claims a constant $C(\alpha, K)$ that does not depend on $\delta$, whi
 \end{proposition}
 
 \begin{proof}
-  \uses{prereq:as}
-  \Cref{prereq:as}.
+  \leanok
+  \uses{prereq:as, prereq:slln, prop:optalloc, prereq:bai_continuity}
+  \Cref{prereq:as} with $W = \{w^*(\mu)\}$. Every arm gets a positive proportion $w^*_a(\mu) > 0$
+  of the pulls (\cref{prop:optalloc}), so it is pulled infinitely often and its empirical mean
+  converges almost surely to its mean (\cref{prereq:slln}). The cost $D(\mu', w', \neg a^*)$ is
+  continuous at $(\mu, w^*(\mu))$, the recommendation is $a^*$ near $\mu$
+  (\cref{prereq:bai_continuity}), and $D(\mu, w^*(\mu), \neg a^*) = T^*(\mu)^{-1} > 0$. The
+  thresholds are $\log(r(t)/\delta) \le \log(1/\delta) + \log r(t)$ with $\log r(t) = o(t)$.
+  This gives $\limsup_{\delta \to 0} \tau_\delta / \log(1/\delta) \le T^*(\mu) \le \alpha
+  T^*(\mu)$, for every $\alpha \ge 1$.
 \end{proof}
 
 \begin{theorem}[{\cite[Theorem 14]{GK16}}]

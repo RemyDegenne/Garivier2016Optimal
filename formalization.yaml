@@ -74,9 +74,14 @@ status:
     (ForLMLExplore/Identification/Task/BestArmOrder.lean, PAPER_ROADMAP.md R7), proved from
     Lemma 4 and the monotonicity of the pair costs, without the scalar equation. Theorem 5 is
     blocked: as stated, it is false for a single arm (erratum E3), and needs the hypothesis that
-    there is an arm b ≠ a. Left: Theorem 10, Proposition 12 and Proposition 13, and Theorem 5
-    once its statement is corrected.
-  sorry_count: 4
+    there is an arm b ≠ a.
+    Phase 2, round of 2026-11-08 (the almost sure upper bound): Proposition 13 is proved, from the
+    almost sure sample complexity of the GLRT for any task, estimator and thresholds
+    log(1/δ) + o(t) (ForLMLExplore/Identification/AlmostSure.lean, PAPER_ROADMAP.md R11) and the
+    strong law of large numbers for the empirical means of a run
+    (ForLMLExplore/SequentialLearning/SumRewards.lean). Left: Theorem 10 and Proposition 12, and
+    Theorem 5 once its statement is corrected.
+  sorry_count: 3
   sorry_in_definitions: 0
 
 alignment:
@@ -141,8 +146,11 @@ alignment:
     - source: "prop:as — Proposition 13, almost sure upper bound"
       lean: "Garivier2016Optimal.stoppingTime_glrt_ne_top_and_limsup_le"
       module: "Garivier2016Optimal.GK2016.Proposition13"
-      status: "stated"
+      status: "proved"
       relation: "exactMatch"
+      note: >-
+        The proof gives the stronger limsup ≤ T*(μ), whatever p ≥ 1; the statement's [Nonempty α]
+        is unused.
     - source: "thm:expectation — Theorem 14, with D-tracking"
       lean: "Garivier2016Optimal.limsup_expectedStoppingTime_trackAndStop_div_log_le"
       module: "Garivier2016Optimal.GK2016.Theorem14"
