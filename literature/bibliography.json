@@ -89,5 +89,100 @@
         ]
       }
     }
+  },
+  "GC11": {
+    "uri": "https://proceedings.mlr.press/v19/garivier11a.html",
+    "identifiers": {
+      "arxiv": "1102.2490"
+    },
+    "citation": {
+      "id": "GC11",
+      "type": "paper-conference",
+      "title": "The KL-UCB Algorithm for Bounded Stochastic Bandits and Beyond",
+      "author": [
+        {
+          "family": "Garivier",
+          "given": "Aurélien"
+        },
+        {
+          "family": "Cappé",
+          "given": "Olivier"
+        }
+      ],
+      "container-title": "Proceedings of the 24th Annual Conference on Learning Theory (COLT)",
+      "volume": "19",
+      "page": "359-376",
+      "issued": {
+        "date-parts": [
+          [
+            2011
+          ]
+        ]
+      }
+    }
+  },
+  "KT81": {
+    "uri": "https://doi.org/10.1109/TIT.1981.1056331",
+    "citation": {
+      "id": "KT81",
+      "type": "article-journal",
+      "title": "The Performance of Universal Encoding",
+      "author": [
+        {
+          "family": "Krichevsky",
+          "given": "Raphail"
+        },
+        {
+          "family": "Trofimov",
+          "given": "Victor"
+        }
+      ],
+      "container-title": "IEEE Transactions on Information Theory",
+      "volume": "27",
+      "issue": "2",
+      "page": "199-207",
+      "DOI": "10.1109/TIT.1981.1056331",
+      "issued": {
+        "date-parts": [
+          [
+            1981
+          ]
+        ]
+      }
+    }
+  },
+  "WST95": {
+    "uri": "https://doi.org/10.1109/18.382012",
+    "citation": {
+      "id": "WST95",
+      "type": "article-journal",
+      "title": "The Context-Tree Weighting Method: Basic Properties",
+      "author": [
+        {
+          "family": "Willems",
+          "given": "Frans M. J."
+        },
+        {
+          "family": "Shtarkov",
+          "given": "Yuri M."
+        },
+        {
+          "family": "Tjalkens",
+          "given": "Tjalling J."
+        }
+      ],
+      "container-title": "IEEE Transactions on Information Theory",
+      "volume": "41",
+      "issue": "3",
+      "page": "653-664",
+      "DOI": "10.1109/18.382012",
+      "issued": {
+        "date-parts": [
+          [
+            1995
+          ]
+        ]
+      }
+    }
   }
 }

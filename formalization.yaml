@@ -93,8 +93,18 @@ status:
     (ForLMLExplore/Identification/Task/BestArmScalar.lean, PAPER_ROADMAP.md R5): by duality, since
     the cost of each pair is a minimum of functions linear in the allocation, and by a
     first-order perturbation at the optimum, with no derivative of the divergence.
-    Left: Theorem 10.
-  sorry_count: 1
+    Phase 2, round of 2026-11-08 (the informational threshold): Theorem 10 is proved, for every
+    δ > 0 and all thresholds at least log(2t(K - 1)/δ), from the Krichevsky–Trofimov bound
+    [GK16, Lemma 11] (ForLMLExplore/InformationTheory/KrichevskyTrofimov.lean), the likelihood
+    ratio supermartingales of a bandit run and their mixtures with Ville's inequality
+    (ForLMLExplore/SequentialLearning/LikelihoodRatio.lean), the pairwise deviation inequality of
+    Bernoulli arms through the Krichevsky–Trofimov mixture
+    (ForLMLExplore/SequentialLearning/KTDeviation.lean), and the bound of the GLR statistic of a
+    wrong arm by the evidence of its pair with the best arm
+    (ForLMLExplore/Identification/KTThreshold.lean, PAPER_ROADMAP.md R9). The proof found a typo
+    in the prior density of Appendix C.1 and a gap for arms without observations (errata E3, E4).
+    Every headline result is proved.
+  sorry_count: 0
   sorry_in_definitions: 0
 
 alignment:
@@ -145,8 +155,11 @@ alignment:
     - source: "thm:kt — Theorem 10, informational threshold for Bernoulli arms"
       lean: "Garivier2016Optimal.measureReal_glrt_bernoulli_le"
       module: "Garivier2016Optimal.GK2016.Theorem10"
-      status: "stated"
+      status: "proved"
       relation: "exactMatch"
+      note: >-
+        The proof uses only δ > 0, not δ < 1, and holds for all thresholds at least
+        log(2t(K - 1)/δ); the statement's [Nonempty α] is unused.
     - source: "prop:deviational — Proposition 12, deviational threshold"
       lean: "Garivier2016Optimal.exists_measureReal_glrt_expFamilyEvidence_le"
       module: "Garivier2016Optimal.GK2016.Proposition12"

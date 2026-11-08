@@ -14,11 +14,11 @@ Paper: RemyDegenne/Garivier2016Optimal · LMLExplore 5113b88ad95f · LMLRoadmaps
 | R6 | Positivity and continuity of the optimal allocation [GK16, Proposition 6, parts 1–2] | exists | `LMLExplore.Identification.pos_of_mem_optAlloc_baiTask_restrict` | – | |
 | R7 | The optimal allocation is ordered like the means [GK16, Proposition 6, part 3] | staged | S1 | proved | `ForLMLExplore/Identification/Task/BestArmOrder.lean`, `ForLMLExplore/Probability/Distributions/ExponentialFamily/Mean.lean` |
 | R8 | C-tracking and D-tracking guarantees [GK16, Lemmas 7, 8, 15, 17, Proposition 9] | exists | `LMLExplore.Identification.CTracking.tendsto_pullCount_div` | – | |
-| R9 | The Krichevsky–Trofimov mixture and the informational threshold for Bernoulli arms [GK16, Lemma 11, Theorem 10] | target | Identification 4.2 | todo | `ForLMLExplore/Identification/KTThreshold.lean` |
+| R9 | The Krichevsky–Trofimov mixture and the informational threshold for Bernoulli arms [GK16, Lemma 11, Theorem 10] | target | Identification 4.2 | proved | `ForLMLExplore/InformationTheory/KrichevskyTrofimov.lean`, `ForLMLExplore/SequentialLearning/LikelihoodRatio.lean`, `ForLMLExplore/SequentialLearning/KTDeviation.lean`, `ForLMLExplore/Identification/KTThreshold.lean` |
 | R10 | The deviational thresholds `log(C t^α/δ)` [GK16, Proposition 12] | target | Identification 4.2 | proved | `ForLMLExplore/Identification/DeviationalThreshold.lean`, `ForLMLExplore/SequentialLearning/ExpFamilyDeviation.lean`, `ForLMLExplore/SequentialLearning/RateFunctionDeviation.lean`, `ForLMLExplore/Probability/Martingale/RateFunction.lean` |
 | R11 | The almost sure sample complexity bound of the GLRT [GK16, Proposition 13] | target | Identification 4.4 | PR #246 | `ForLMLExplore/Identification/AlmostSure.lean`, `ForLMLExplore/SequentialLearning/SumRewards.lean` |
 | R12 | Expected sample complexity of Track-and-Stop [GK16, Theorem 14, Lemmas 19, 20] | exists | `LMLExplore.Identification.IdentTask.eventually_expectedStoppingTime_trackAndStop_le_of_charTime_lt` | – | |
-| R13 | The paper's statements, specializing the items above to its setting | paper | | todo | `GK2016/Basic.lean`, `GK2016/Theorem1.lean`, `GK2016/Theorem5.lean`, `GK2016/Proposition6.lean`, `GK2016/Theorem10.lean`, `GK2016/Proposition12.lean`, `GK2016/Proposition13.lean`, `GK2016/Theorem14.lean` |
+| R13 | The paper's statements, specializing the items above to its setting | paper | | proved | `GK2016/Basic.lean`, `GK2016/Theorem1.lean`, `GK2016/Theorem5.lean`, `GK2016/Proposition6.lean`, `GK2016/Theorem10.lean`, `GK2016/Proposition12.lean`, `GK2016/Proposition13.lean`, `GK2016/Theorem14.lean` |
 | R14 | Continuity of the cost of the alternatives of best arm identification near a model, and openness of its answer sets, for arms in an exponential family | refactor | `LMLExplore.Identification.continuousWithinAt_altCost_baiTask_restrict` | merged #242 | `ForLMLExplore/Identification/Task/BestArm.lean` |
 
 ## Notes
@@ -65,6 +65,23 @@ Paper: RemyDegenne/Garivier2016Optimal · LMLExplore 5113b88ad95f · LMLRoadmaps
 - R9: Identification 4.2 asks for the Bernoulli thresholds through the Krichevsky–Trofimov mixture,
   next to the other union-bound thresholds; the mixture bound `sup p_u(x)/kt(x) ≤ 2√n` is a
   prerequisite and belongs with it.
+  Proved for every sampling and recommendation rule, every `δ > 0` and all thresholds at least
+  `log(2t(K-1)/δ)` (`measureReal_histOutputMeasure_glrt_baiTask_bernoulli_le`). The change of
+  measure of [GK16, Appendix C.1] is replaced by a supermartingale: along a run against any
+  stochastic bandit, `exp (∑ k < n, z (A k) (Y k))` is a supermartingale when
+  `∫ exp (z a) dν_a ≤ 1` for every arm, and so are its mixtures over a prior, with Ville's
+  inequality (`supermartingale_exp_sum_of_lintegral_exp_le_one`,
+  `measure_exists_le_integral_exp_sum_le`, for a new LMLExplore file
+  `SequentialLearning/LikelihoodRatio.lean`; the mixture lemma and Ville's inequality are
+  LMLExplore's `Probability/Martingale/Mixture.lean` and `Ville.lean`). The Krichevsky–Trofimov
+  bound (`div_pow_mul_div_pow_le_two_mul_sqrt_mul_integral_betaMeasure` and its forms) uses Tau
+  Ceti's beta moments and goes to a new file `InformationTheory/KrichevskyTrofimov.lean`. The
+  pairwise deviation inequality of Bernoulli arms, `P(∃ n, log(2nx) < N_a d(μ̂_a, p_a) +
+  N_b d(μ̂_b, p_b)) ≤ 1/x` (`measure_exists_log_two_mul_mul_lt_klBer_le`), goes with the other
+  deviation inequalities of runs, in `SequentialLearning/`. The bound of the GLR statistic of a
+  wrong arm by its pairwise evidence (`glr_plugInCost_baiTask_bernoulli_le`) and the threshold go
+  to a new `Identification/KTThreshold.lean`, next to `ExpFamilyThreshold.lean`; the pairwise
+  thresholds of the covers of Identification 4.3 can reuse the deviation inequality.
 - R10: the constant must depend on `δ`: no `C(α, K)` makes `log(C t^α/δ)` `δ`-correct for every
   `δ` (`notes/paper-errata.md`, E2). Identification 4.2 asks for an explicit `C(α, K)`, for arms
   dominated by any exponential families, from the two-sided bound of Layer 1.2; prove it with an

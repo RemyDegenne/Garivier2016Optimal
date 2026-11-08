@@ -11,7 +11,8 @@ and [Mathlib](https://github.com/leanprover-community/mathlib4). Made from
 - The paper: `source/arXiv-1602.04589v2/`; the outline of the formalization: `notes/blueprint-outline.md`. Errors found in it, with their corrections: `notes/paper-errata.md`.
 - The paper's results: `Garivier2016Optimal/GK2016/`, one file per result, listed with their status in
   `formalization.yaml`, and `GK2016/Basic.lean`, the lemmas that meet the paper's setting with
-  LMLExplore's hypotheses; comparator challenges in `comparator/`.
+  LMLExplore's hypotheses; comparator challenges in `comparator/`. Since 2026-11-08 every headline
+  result is proved, with no `sorry` left in the library.
 - Library-shaped material: `Garivier2016Optimal/ForLMLExplore/`, which Tau Ceti workers port to LMLExplore;
   `PAPER_ROADMAP.md` says where each item goes.
 

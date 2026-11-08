@@ -334,3 +334,64 @@ Decisions taken in the unattended rounds of `scripts/formalize.sh`, by date.
   unchanged: the LMLExplore pin is still `5113b88ad95f`, and LMLRoadmaps `main` the commit it
   names.
 - **Checks.** No Lean, blueprint or statement changed in this round, so none was run.
+
+## 2026-11-08: the informational threshold (Theorem 10)
+
+- **Job and area.** Advance. Tag, Refresh and Refactor pull request did not apply: LMLRoadmaps
+  `main` is still `d01bdd6b89ce`, LMLExplore#246 (R11) is open with no review since the last
+  refresh, and R14, the only `refactor` item, is merged. Theorem 10 (R9) was the last result
+  with a `sorry`.
+- **Route: a supermartingale instead of a change of measure.** The paper bounds
+  `P_μ(T_{a,b} = t)` by `2t e^{-β} P̃(T_{a,b} = t)`, where `P̃` is the Bayesian model with the
+  prior `Beta(1/2, 1/2)` on the means of `a` and `b`. Formalizing `P̃` needs the density of the
+  law of the history under a mixture of bandits. The mixture of the likelihood ratios against the
+  true bandit is a nonnegative supermartingale with initial value `1` instead, and Ville's
+  inequality gives `P(∃ n, x ≤ Λ_n) ≤ 1 / x` directly. Only the true model appears.
+  LMLExplore has mixtures of supermartingales and Ville's inequality. The one-step bound along a
+  run is LMLExplore's `HasCondDistrib.lintegral_comp_prodMk_eq_lintegral_lintegral` for the
+  conditional law of the feedback given the history and the action.
+- **Generality.** The supermartingale and its mixtures are stated for any stochastic bandit, any
+  observation space and any `z` with `∫ exp (z a) dν_a ≤ 1`: the log-likelihood ratios of any
+  other bandit, or of a family of them. The pairwise deviation inequality holds for every
+  sampling rule and every `x > 0`. The threshold holds for every `δ > 0` (the statement's
+  `δ < 1` is unused) and for all history-dependent thresholds at least `log (2 n (K - 1) / δ)`.
+  It is stated for best arm identification with Bernoulli arms on `(0, 1) ^ K`, as the paper
+  states it. The extension of [GK16, Section 3.2] to other exponential families through other
+  universal mixtures is not done.
+- **The GLR statistic.** The frozen statement uses the plug-in statistic of the empirical means,
+  minimized over the alternatives of the restricted task. Each alternative has a unique best arm
+  and means in `(0, 1)`. The bound by the pairwise evidence of the wrong arm `i` and the best arm
+  uses `altCost_baiTask_restrict_eq_iInf` (LMLExplore): the infimum can be taken over the vectors
+  of `(0, 1) ^ K` with `λ_i ≤ λ_b` for some `b ≠ i`, since the cost is continuous there. The
+  other arms are moved to `(1 - t) p̂_c + t / 2`, which costs at most `t` each by LMLExplore's
+  `χ²` bound, and `t → 0`. Empirical means `0` or `1` are why the other arms cannot be put at
+  their empirical means exactly.
+- **The Krichevsky–Trofimov bound.** By the induction of [WST95], with Tau Ceti's beta moments
+  and recursion. The analytic step reduces to `(m + 1) log (m + 1) - m log m - log (m + 1/2) ≤ 1
+  ≤ (n + 1/2) log (1 + 1/n)`. The left inequality is a derivative argument, the right one the first
+  term of Mathlib's series `Real.hasSum_log_one_add_inv`. The paper's form with `sup_u` is
+  `pow_mul_one_sub_pow_le_two_mul_sqrt_mul_integral_betaMeasure`, through the maximum likelihood
+  bound `n d(k / n, u) ≥ 0`. That `kt` is a probability on `{0, 1} ^ n` is not formalized, since
+  the supermartingale argument does not use it.
+- **Errata.** The prior density in Appendix C.1 is `1 / √(π u (1 - u))`, which does not integrate
+  to `1` (E3). Lemma 11 is applied to an arm with no observation, where `2 √0 = 0` fails (E4). The
+  statement of Theorem 10 is not affected.
+- **Placement.** Four new files, all R9's, at the paths of new LMLExplore files:
+  `InformationTheory/KrichevskyTrofimov.lean`, `SequentialLearning/LikelihoodRatio.lean`,
+  `SequentialLearning/KTDeviation.lean` and `Identification/KTThreshold.lean`. Only the
+  Krichevsky–Trofimov bounds, the pairwise deviation inequality, Ville's inequality for mixtures
+  and the threshold are `theorem`s. The analytic steps are private lemmas.
+- **The frozen statement.** As for Proposition 13, the section variables from `[Nonempty α]` on
+  became binders of the theorem, in the order of the challenge, and the theorem has
+  `@[nolint unusedArguments]`, since `[Nonempty α]` is unused. A scratch file elaborated the
+  challenge's statement next to the solution. The types are the same `Expr`, with the same
+  universe names, and the axioms are `propext`, `Classical.choice` and `Quot.sound`.
+- **Bibliography.** `literature/bibliography.json` gained WST95 and KT81, cited by the new
+  files, and GC11, which the deviational threshold's files cite with a locator since the round
+  of Proposition 12. `blueprint/src/bib.bib` gained WST95.
+- **Checks.** `scripts/check-build.sh` (0 declarations use `sorry`, no other warning),
+  `lake exe runLinter Garivier2016Optimal`, `scripts/check-forlmlexplore.sh`,
+  `python3 scripts/check-blueprint.py`, `leanblueprint pdf`, `leanblueprint web` and
+  `lake exe checkdecls blueprint/lean_decls`. No definition in the closure of a headline
+  statement changed, so `lake build Comparator` was not needed. The full comparator
+  verification is left to `formalize.sh`, which runs it once no `sorry` is left.

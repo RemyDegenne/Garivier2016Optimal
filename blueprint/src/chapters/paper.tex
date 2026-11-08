@@ -202,15 +202,18 @@ The paper states it for $\delta \in (0, 1)$, which is false beyond $1/2$
   \label{thm:kt}
   \lean{Garivier2016Optimal.measureReal_glrt_bernoulli_le}
   \leanok
-  \uses{prereq:kt}
+  \uses{prereq:kt_threshold}
   For Bernoulli arms, whatever the sampling rule, Chernoff's stopping rule with the threshold
   $\beta(t, \delta) = \log(2t(K-1)/\delta)$ ensures
   $\Prob_\mu(\tau_\delta < \infty, \hat a_{\tau_\delta} \ne a^*) \le \delta$ for every $\mu \in \cS$.
 \end{theorem}
 
 \begin{proof}
-  \uses{prereq:kt}
-  \Cref{prereq:kt}.
+  \leanok
+  \uses{prereq:kt_threshold}
+  \Cref{prereq:kt_threshold}, which holds for every $\delta > 0$ and all thresholds at least
+  $\log(2t(K-1)/\delta)$. The paper's prior density in Appendix C.1 has a typo
+  (\texttt{notes/paper-errata.md}, E3).
 \end{proof}
 
 \begin{proposition}[{\cite[Proposition 12]{GK16}}]

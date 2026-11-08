@@ -50,3 +50,39 @@ are numbered `E1`, `E2`, … and never renumbered.
   for every `α > 0`.
 - **Kind:** wrong dependence of a constant, from an error in the last step of the proof.
 - **Found:** check of the statements against the paper, 2026-11-08.
+
+## E3. Appendix C.1: the density of the Krichevsky–Trofimov prior
+
+- **Where:** arXiv:1602.04589v2, Appendix C.1 (proof of Theorem 10), the definition
+  "`kt(x) = ∫_0^1 1 / √(π u (1 - u)) p_u(x) du`" and the density
+  "`h(u) = 1 / √(π u (1 - u)) 𝟙_{[0, 1]}(u)`" of the prior under which `P̃` is defined.
+- **Error:** `∫_0^1 du / √(π u (1 - u)) = π / √π = √π ≠ 1`, so `h` is not a probability density,
+  and `kt` and `P̃` are not probability distributions. Lemma 11 in Section 3.2 has the right
+  normalization, `1 / (π √(u (1 - u)))`, and the appendix itself names the prior
+  `Beta(1/2, 1/2)`.
+- **Correction:** `h(u) = 1 / (π √(u (1 - u)))` on `(0, 1)`, the density of `Beta(1/2, 1/2)`, as
+  in Lemma 11.
+- **Lean:** the prior is `betaMeasure (1 / 2) (1 / 2)`
+  (`LMLExplore.div_pow_mul_div_pow_le_two_mul_sqrt_mul_integral_betaMeasure`,
+  `LMLExplore.measure_exists_log_two_mul_mul_lt_klBer_le`).
+- **Kind:** typo.
+- **Found:** round of 2026-11-08 (the informational threshold, Theorem 10).
+
+## E4. Appendix C.1: an arm without observations
+
+- **Where:** arXiv:1602.04589v2, Appendix C.1 (proof of Theorem 10): "we have that
+  `max_{μ'_a ≥ μ'_b} p_{μ'_a}(x^a_t) p_{μ'_b}(x^b_t) ≤ 2t × kt(x^a_t) kt(x^b_t)`, which follows from
+  Lemma 11 stated in the main text and the fact that for `n_a, n_b` such that `n_a + n_b ≤ t`,
+  `4 √n_a √n_b ≤ 2 (n_a + n_b) ≤ 2t`."
+- **Error:** the bound `2 √n` of Lemma 11 fails for `n = 0`: the empty sequence has
+  `p_u = kt = 1`, so the ratio is `1 > 2 √0`. When one of the two arms has no observation, the
+  product of the two bounds of Lemma 11 is `0`, and the argument as written does not give the
+  inequality.
+- **Correction:** the inequality holds for `t ≥ 1`: if `n_a = 0`, the ratio of the arm `a` is `1`
+  and that of `b` is at most `2 √n_b ≤ 2 n_b ≤ 2t`; if `n_a = n_b = 0`, the product is
+  `1 ≤ 2t`. At `t = 0` the statistic vanishes and the stopping rule does not stop.
+- **Lean:** `LMLExplore.measure_exists_log_two_mul_mul_lt_klBer_le` bounds each arm with the
+  factor `2 √N`, or `1` for an arm without observations, and the product of the two factors by
+  `2 n` once one of the arms has an observation. Theorem 10 is unaffected.
+- **Kind:** gap in the proof.
+- **Found:** round of 2026-11-08 (the informational threshold, Theorem 10).

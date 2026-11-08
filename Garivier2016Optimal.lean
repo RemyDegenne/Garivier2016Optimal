@@ -2,12 +2,16 @@ module  -- shake: keep-all --deprecated_module: ignore
 
 public import Garivier2016Optimal.ForLMLExplore.Identification.AlmostSure
 public import Garivier2016Optimal.ForLMLExplore.Identification.DeviationalThreshold
+public import Garivier2016Optimal.ForLMLExplore.Identification.KTThreshold
 public import Garivier2016Optimal.ForLMLExplore.Identification.Task.BestArm
 public import Garivier2016Optimal.ForLMLExplore.Identification.Task.BestArmOrder
 public import Garivier2016Optimal.ForLMLExplore.Identification.Task.BestArmScalar
+public import Garivier2016Optimal.ForLMLExplore.InformationTheory.KrichevskyTrofimov
 public import Garivier2016Optimal.ForLMLExplore.Probability.Distributions.ExponentialFamily.Mean
 public import Garivier2016Optimal.ForLMLExplore.Probability.Martingale.RateFunction
 public import Garivier2016Optimal.ForLMLExplore.SequentialLearning.ExpFamilyDeviation
+public import Garivier2016Optimal.ForLMLExplore.SequentialLearning.KTDeviation
+public import Garivier2016Optimal.ForLMLExplore.SequentialLearning.LikelihoodRatio
 public import Garivier2016Optimal.ForLMLExplore.SequentialLearning.RateFunctionDeviation
 public import Garivier2016Optimal.ForLMLExplore.SequentialLearning.SumRewards
 public import Garivier2016Optimal.GK2016.Basic

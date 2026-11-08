@@ -171,12 +171,128 @@ not provide yet. Their Lean code goes to the library's \texttt{ForLMLExplore/} f
 
 \begin{lemma}
   \label{prereq:kt}
-  The Krichevsky--Trofimov distribution
-  $\mathrm{kt}(x) = \int_0^1 \frac{1}{\pi\sqrt{u(1-u)}} p_u(x)\, du$ is a probability on
-  $\{0, 1\}^n$ with $\sup_x \sup_u p_u(x) / \mathrm{kt}(x) \le 2\sqrt n$ \cite[Lemma 11]{GK16},
-  and with Bernoulli arms the GLRT with the threshold $\log(2t(K-1)/\delta)$ is $\delta$-correct
-  whatever the sampling rule \cite[Theorem 10]{GK16}. LMLRoadmaps: Identification 4.2.
+  \lean{LMLExplore.integral_pow_mul_one_sub_pow_betaMeasure,
+    LMLExplore.div_pow_mul_div_pow_le_two_mul_sqrt_mul_integral_betaMeasure,
+    LMLExplore.pow_mul_one_sub_pow_le_two_mul_sqrt_mul_integral_betaMeasure,
+    LMLExplore.mul_klBerReal_div_le_log_two_mul_sqrt_mul_integral_betaMeasure_div}
+  \leanok
+  For a sequence of $n = k + m \ge 1$ observations with $k$ ones and $m$ zeros, let
+  $\mathrm{kt}(k, m) = \int_0^1 u^k (1-u)^m \frac{du}{\pi\sqrt{u(1-u)}}
+  = B(\tfrac12 + k, \tfrac12 + m) / B(\tfrac12, \tfrac12)$ be its Krichevsky--Trofimov
+  probability, the mixture of the Bernoulli likelihoods over the arcsine law
+  $\mathrm{Beta}(\tfrac12, \tfrac12)$. Then $u^k (1-u)^m \le (k/n)^k (m/n)^m \le 2\sqrt n\,
+  \mathrm{kt}(k, m)$ for every $u \in [0, 1]$ \cite[Lemma 11]{GK16}, and for $p \in (0, 1)$,
+  $n\, d(k/n, p) \le \log\bigl(2\sqrt n\, \mathrm{kt}(k, m) / (p^k (1-p)^m)\bigr)$. That
+  $\mathrm{kt}$ is a probability on $\{0, 1\}^n$ is not formalized: the proof of
+  \cref{prereq:kt_pair} does not need it.
 \end{lemma}
+
+\begin{proof}
+  \leanok
+  The moments of the beta laws give the closed form, and the recursion of the beta function
+  $\mathrm{kt}(k, m + 1) = \mathrm{kt}(k, m)\,(m + \tfrac12)/(n + 1)$. By induction on $m$
+  (from $\mathrm{kt}(0, 1) = \tfrac12$ and the symmetry in $k$ and $m$), the claim
+  $k^k m^m \le 2\sqrt n\, n^n\, \mathrm{kt}(k, m)$ propagates from $m$ to $m + 1$ when
+  $(m+1)^{m+1}\sqrt n\, n^n \le \sqrt{n+1}\,(m + \tfrac12)\, m^m (n+1)^n$, which in logarithms is
+  $(m+1)\log(m+1) - m\log m - \log(m + \tfrac12) \le 1 \le (n + \tfrac12)\log(1 + 1/n)$. The
+  right inequality is the first term of the series of $\log(1 + 1/n)$ in powers of $1/(2n+1)$;
+  the left one, for $m \ge 1$, says that $t \mapsto (1+t)\log(1+t) - t - t\log(1 + t/2)$, whose
+  derivative is $\log\frac{1+t}{1+t/2} - \frac{t}{2+t} \le 0$, is nonpositive at $t = 1/m$
+  \cite[Appendix]{WST95}. The maximum likelihood bound is $n\, d(k/n, u) \ge 0$, and
+  $n\, d(k/n, p) = \log\bigl((k/n)^k (m/n)^m / (p^k (1-p)^m)\bigr)$.
+\end{proof}
+
+\begin{lemma}
+  \label{prereq:lr_supermartingale}
+  \lean{LMLExplore.supermartingale_exp_sum_of_lintegral_exp_le_one,
+    LMLExplore.measure_exists_le_integral_exp_sum_le}
+  \leanok
+  Along a run of any algorithm against a stochastic bandit $\nu$, if
+  $\int e^{z(a, y)}\, d\nu_a(y) \le 1$ for every arm $a$, then
+  $n \mapsto \exp\bigl(\sum_{k < n} z(A_k, Y_k)\bigr)$ is a supermartingale for the filtration of
+  the history and the next action. If $z = z_\ell$ depends measurably on a parameter $\ell$ drawn
+  from a probability measure $\rho$, then for every $c > 0$,
+  $\Prob\bigl(\exists n,\ c \le \int \exp(\sum_{k<n} z_\ell(A_k, Y_k))\, d\rho(\ell)\bigr) \le 1/c$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  Given the history and the action of round $n$, the observation $Y_n$ has law $\nu_{A_n}$, so
+  the conditional expectation of $e^{z(A_n, Y_n)}$ is at most $1$. Mixtures of nonnegative
+  supermartingales are supermartingales (in LMLExplore), with initial value $1$ here, and Ville's
+  inequality (in LMLExplore) concludes.
+\end{proof}
+
+\begin{lemma}
+  \label{prereq:kt_pair}
+  \lean{LMLExplore.sum_ite_mul_add_one_sub_mul,
+    LMLExplore.measure_exists_log_two_mul_mul_lt_klBer_le}
+  \leanok
+  \uses{prereq:kt, prereq:lr_supermartingale}
+  Along a run of any algorithm against a Bernoulli bandit with means $p \in (0, 1)^K$, for two arms
+  $a \ne b$ and every $x > 0$,
+  $\Prob\bigl(\exists n,\ \log(2nx) < N_a(n)\, d(\hat\mu_a(n), p_a) + N_b(n)\, d(\hat\mu_b(n),
+  p_b)\bigr) \le 1/x$ \cite[proof of Theorem 10]{GK16}.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  \uses{prereq:kt, prereq:lr_supermartingale}
+  Take $z_{(u, v)}(c, y)$ the log-likelihood ratio of the observation $y$ of the arm $c$ under the
+  bandit whose means on $a$ and $b$ are $u$ and $v$ against the true one, and
+  $\rho = \mathrm{Beta}(\tfrac12, \tfrac12)^{\otimes 2}$. Its sum over the rounds is
+  $S_a \log(u/p_a) + (N_a - S_a)\log((1-u)/(1-p_a))$ plus the same for $b$, so the mixture is the
+  product $\Lambda_a \Lambda_b$ of the Krichevsky--Trofimov likelihood ratios
+  $\Lambda_c = \mathrm{kt}(S_c, N_c - S_c) / (p_c^{S_c} (1-p_c)^{N_c - S_c})$, the observations
+  being in $\{0, 1\}$ almost surely. By \cref{prereq:kt}, $N_c\, d(\hat\mu_c, p_c) \le
+  \log(w_c \Lambda_c)$ with $w_c = 2\sqrt{N_c}$, or $w_c = 1$ when $N_c = 0$. On the event, one of
+  the two arms has an observation (the right side is positive), and then $w_a w_b \le 2n$, so
+  $\log(2nx) < \log(2n\Lambda_a\Lambda_b)$ and $x < \Lambda_a \Lambda_b$:
+  \cref{prereq:lr_supermartingale} with $c = x$ concludes. The paper applies Lemma 11 also to an
+  arm with no observation, where it fails (\texttt{notes/paper-errata.md}, E4).
+\end{proof}
+
+\begin{lemma}
+  \label{prereq:kt_glr}
+  \lean{LMLExplore.Identification.glr_plugInCost_baiTask_bernoulli_le}
+  \leanok
+  For best arm identification with Bernoulli arms on the vectors of means in $(0, 1)$, the GLR
+  statistic of the plug-in statistic of the empirical means for the arm $i$ is at most
+  $N_i\, d(\hat\mu_i, \lambda_i) + N_j\, d(\hat\mu_j, \lambda_j)$ for every arm $j \ne i$ and all
+  $\lambda_i \le \lambda_j$ in $(0, 1)$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  The cost of the alternatives to $i$ is the infimum of the transportation cost from the empirical
+  means over the vectors $\lambda'$ of $(0, 1)^K$ with $\lambda'_i \le \lambda'_b$ for some
+  $b \ne i$, since the cost is continuous there (in LMLExplore). Take $\lambda'$ with
+  $\lambda'_i = \lambda_i$, $\lambda'_j = \lambda_j$, and
+  $\lambda'_c = (1 - t)\hat p_c + t/2$ on the other arms, where $\hat p_c$ is $\hat\mu_c$ clamped to
+  $[0, 1]$: by the $\chi^2$ bound, $d(\hat p_c, \lambda'_c) \le t$, and $t \to 0$.
+\end{proof}
+
+\begin{lemma}
+  \label{prereq:kt_threshold}
+  \lean{LMLExplore.Identification.measureReal_histOutputMeasure_glrt_baiTask_bernoulli_le}
+  \leanok
+  \uses{prereq:kt_pair, prereq:kt_glr}
+  For best arm identification with Bernoulli arms on the vectors of means in $(0, 1)$ and every
+  $\delta > 0$, whatever the sampling and recommendation rules, the GLRT with the plug-in statistic
+  of the empirical means and thresholds at least $\log(2n(K-1)/\delta)$ stops with an arm that is
+  not the best with probability at most $\delta$ \cite[Theorem 10]{GK16}. LMLRoadmaps:
+  Identification 4.2.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  \uses{prereq:kt_pair, prereq:kt_glr}
+  If the GLRT stops at round $n$ with an arm $i \ne a^*$, then by \cref{prereq:kt_glr} with
+  $\lambda = \mu$ on the pair $(i, a^*)$,
+  $\log(2n(K-1)/\delta) < N_i\, d(\hat\mu_i, \mu_i) + N_{a^*}\, d(\hat\mu_{a^*}, \mu_{a^*})$.
+  By \cref{prereq:kt_pair} with $x = (K-1)/\delta$, each of the $K - 1$ wrong arms contributes at
+  most $\delta/(K-1)$.
+\end{proof}
 
 \begin{lemma}
   \label{prereq:iid_slice}
