@@ -79,8 +79,9 @@ theorem continuousAt_of_mem_optAlloc (hρ : ∀ c, ¬ id =ᵐ[ρ] fun _ ↦ c)
 in the exponential family `(ρ, id)` and a vector of means `μ` of the family with unique best arm
 `a`, an arm whose mean is larger, closer to the best, gets a larger optimal proportion: if
 `μ c ≤ μ b` for two arms `b, c ≠ a`, then `w c ≤ w b`. The proof does not go through the scalar
-equation of [GK16, Theorem 5], as the paper's does: it only uses the equality of the costs of the
-pairs [GK16, Lemma 4] and their monotonicity in the weight and in the mean of the other arm. -/
+equation of Theorem 5 of [GK16], as the paper's does: it only uses the equality of the costs of
+the pairs (Lemma 4 of [GK16]) and their monotonicity in the weight and in the mean of the other
+arm. -/
 theorem le_of_mem_optAlloc_of_le (hρ : ∀ c, ¬ id =ᵐ[ρ] fun _ ↦ c)
     (hν : ∀ μ' b, ν μ' b = ρ.expFamily id (ρ.natParam id (μ' b)))
     (hμ : ∀ b, μ b ∈ ρ.expFamilyMeans id) (ha : ∀ b ≠ a, μ b < μ a) {w : α → ℝ}

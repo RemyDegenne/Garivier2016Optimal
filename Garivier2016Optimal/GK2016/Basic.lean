@@ -46,8 +46,8 @@ variable {α : Type*} {mα : MeasurableSpace α} (ν : (α → ℝ) → Kernel �
   [∀ μ, IsMarkovKernel (ν μ)] (ρ : Measure ℝ) {μ : α → ℝ}
 
 /-- The bounds `f δ ≤ c log (1 / δ)` for all small enough `δ`, for every `c > t`, give
-`limsup_{δ → 0} f δ / log (1 / δ) ≤ t`, the form in which [GK16, Proposition 13] and
-[GK16, Theorem 14] state them. -/
+`limsup_{δ → 0} f δ / log (1 / δ) ≤ t`, the form in which Proposition 13 and Theorem 14 of
+[GK16] state them. -/
 lemma limsup_div_log_le {f : ℝ → ℝ≥0∞} {t : ℝ≥0∞}
     (h : ∀ c : ℝ≥0, t < c → ∀ᶠ δ in 𝓝[>] 0, f δ ≤ c * ENNReal.ofReal (log (1 / δ))) :
     limsup (fun δ ↦ f δ / ENNReal.ofReal (log (1 / δ))) (𝓝[>] 0) ≤ t := by

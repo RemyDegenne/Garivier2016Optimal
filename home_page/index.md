@@ -9,5 +9,5 @@ Lean 4 formalization of the paper *Optimal Best Arm Identification with Fixed Co
 * [Blueprint as pdf]({{ site.url }}/blueprint.pdf)
 * [Dependency graph]({{ site.url }}/blueprint/dep_graph_document.html)
 * [Referee site]({{ site.url }}/referee/)
-* [Literature links]({{ site.url }}/literature/annotations.jsonl): which declarations formalize which results of the paper
+* [Literature links]({{ site.url }}/literature/): which declarations formalize which results of the paper
 * [Errata](https://github.com/RemyDegenne/Garivier2016Optimal/blob/main/notes/paper-errata.md): errors found in the paper, with their corrections
