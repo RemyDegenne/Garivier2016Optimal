@@ -1,11 +1,11 @@
 /-
-Copyright (c) 2026 PAPERAUTHOR. All rights reserved.
+Copyright (c) 2026 Remy Degenne. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: PAPERAUTHOR
+Authors: Remy Degenne
 -/
 -- One import per file proving a headline result of formalization.yaml, for instance
--- `import PaperLib.PaperResults.Theorem1`. Until then, the library's root.
-import PaperLib
+-- `import Garivier2016Optimal.GK2016.Theorem1`. Until then, the library's root.
+import Garivier2016Optimal
 
 /-! # Comparator solution module
 

@@ -1,7 +1,7 @@
 # A paper project on top of LMLExplore. LMLExplore brings Mathlib, Tau Ceti and LML at the versions
 # it pins: never require them here, or at other revisions (`scripts/check-pins.sh` checks).
-name = "PaperLib"
-defaultTargets = ["PaperLib"]
+name = "Garivier2016Optimal"
+defaultTargets = ["Garivier2016Optimal"]
 lintDriver = "batteries/runLinter"
 
 [leanOptions]
@@ -25,7 +25,7 @@ name = "checkdecls"
 git = "https://github.com/PatrickMassot/checkdecls.git"
 
 [[lean_lib]]
-name = "PaperLib"
+name = "Garivier2016Optimal"
 
 # Comparator (https://github.com/leanprover/comparator) challenge and solution modules for the
 # headline results listed in formalization.yaml; see comparator/README.md. One library with a stub

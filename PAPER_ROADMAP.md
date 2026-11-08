@@ -1,6 +1,6 @@
 # Paper roadmap: <title of the paper>
 
-Paper: PAPEROWNER/PAPERREPO · LMLExplore none · LMLRoadmaps none · Refreshed never
+Paper: RemyDegenne/Garivier2016Optimal · LMLExplore none · LMLRoadmaps none · Refreshed never
 
 ## Items
 

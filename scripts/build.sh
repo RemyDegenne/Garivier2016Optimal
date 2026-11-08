@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Build the paper project, reusing Mathlib's and Tau Ceti's prebuilt files instead of compiling them.
 #
-# Usage: scripts/build.sh [lake build arguments]      e.g. scripts/build.sh PaperLib --wfail
+# Usage: scripts/build.sh [lake build arguments]      e.g. scripts/build.sh Garivier2016Optimal --wfail
 #
 # Run it anywhere inside the repository; CI runs the copy of lml-paper-template from the project's
 # root, so the script acts on the Git checkout of the current directory, not on its own folder.

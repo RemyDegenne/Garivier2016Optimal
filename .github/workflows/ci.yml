@@ -24,7 +24,7 @@ jobs:
   paper:
     uses: LeanMachineLearning/lml-paper-template/.github/workflows/paper.yml@main
     with:
-      lib: PaperLib
+      lib: Garivier2016Optimal
       # The template itself publishes nothing, and checks itself against LMLExplore's current main.
       publish: ${{ github.event_name == 'push' && github.repository != 'LeanMachineLearning/lml-paper-template' }}
       update-lmlexplore: ${{ github.repository == 'LeanMachineLearning/lml-paper-template' }}

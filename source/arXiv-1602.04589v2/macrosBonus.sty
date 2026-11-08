@@ -1,0 +1,137 @@
+%% COMPLEMENT MACROS AOS
+
+
+%% Color definition
+\usepackage{xcolor}
+\definecolor{Bleu}{RGB}{0,0,204}
+\definecolor{Violet}{RGB}{102,0,204}
+\definecolor{Rouge}{RGB}{204,0,0}
+\definecolor{Highlight}{RGB}{251,0,0}
+
+
+\usepackage{breakcites} % repare pb de mise à la ligne des references
+
+\bibliographystyle{apalike}
+
+\usepackage{bm}
+%\usepackage{amsthm,amscd}
+%\usepackage{amsmath,amssymb}
+\usepackage{dsfont}
+%\usepackage{MnSymbol}
+\usepackage{enumitem}
+ 
+%% Theorem English
+% \newtheorem{theorem}{Theorem}%[section]
+% \newtheorem{assumption}[theorem]{Assumption}
+% \newtheorem{claim}[theorem]{Claim}
+% \newtheorem{corollary}[theorem]{Corollary}
+% \newtheorem{definition}[theorem]{Definition}
+% \newtheorem{example}[theorem]{Example}
+% \newtheorem{lemma}[theorem]{Lemma}
+% \newtheorem{notation}[theorem]{Notation}
+% \newtheorem{proposition}[theorem]{Proposition}
+% \newtheorem{remark}[theorem]{Remark}
+
+
+
+% \startlocaldefs
+% \numberwithin{equation}{section}
+% \theoremstyle{plain}
+% \newtheorem{theorem}{Theorem}[section]
+% \newtheorem{lemma}[theorem]{Lemma}
+% \newtheorem{assumption}[theorem]{Assumption}
+% \newtheorem{proposition}[theorem]{Proposition}
+% \newtheorem{remark}[theorem]{Remark}
+% \endlocaldefs
+
+
+%Calligraphic Shorthands
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cB}{\mathcal{B}}
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\cE}{\mathcal{E}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\cG}{\mathcal{G}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cJ}{\mathcal{J}}
+\newcommand{\cK}{\mathcal{K}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\cM}{\mathcal{M}}
+\newcommand{\cN}{\mathcal{N}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cR}{\mathcal{R}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\cT}{\mathcal{T}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cV}{\mathcal{V}}
+\newcommand{\cW}{\mathcal{W}}
+\newcommand{\cX}{\mathcal{X}}
+\newcommand{\cY}{\mathcal{Y}}
+\newcommand{\cZ}{\mathcal{Z}}
+
+%Blackboard Bold Shorthands
+\newcommand{\bE}{\mathbb{E}}
+\newcommand{\bP}{\mathbb{P}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+
+%Probability Shorthands
+\def \ind{\mathds{1}}
+\newcommand{\norm}[2]{\mathcal{N}\left(#1,#2\right)}
+\newcommand{\BetaD}[2]{\text{Beta}\left(#1,#2 \right)}
+\newcommand{\muhat}{\hat{\mu}}
+
+% Bandit specific shorthands
+\newcommand{\reg}{\text{R}}
+\newcommand{\regfull}{\reg_{\bm{\theta}}(T,\cA)}
+\newcommand{\br}{\text{BR}}
+\newcommand{\Kinf}{\cK_{\text{inf}}\,}
+\newcommand{\muA}{\hat{\mu}_a(t)}%moyenne empirique dans l'algorithme 
+\newcommand{\muS}{\hat{\mu}_{a,s}}
+\newcommand{\thetaU}{\underline{\theta}}
+
+% Statistical Shorthands
+\newcommand{\K}{\mathrm{K}}
+\newcommand{\Kb}{\mathrm{K}}
+
+
+% Misc Math Operations Shorthands
+\newcommand{\argmin}[1]{\underset{#1}{\text{argmin}}}
+\newcommand{\argmax}[1]{\underset{#1}{\text{argmax}}}
+\newcommand{\ngoesto}{\underset{n\rightarrow \infty}{\rightarrow}}
+\newcommand{\Tgoesto}{\underset{T\rightarrow \infty}{\longrightarrow}}
+\newcommand{\isequT}{\underset{T\rightarrow \infty}{\sim}}
+
+\def \qed {\begin{flushright} $\qquad \Box $
+  \end{flushright}}
+
+
+% Specific to this paper 
+
+\newcommand{\limInf}{\underline{\lim}}
+
+\renewcommand{\d}{\mathrm{d}}
+\newcommand{\KL}{\mathrm{KL}}
+\def\kl{\mathrm{kl}}
+\newcommand{\kt}{\mathrm{kt}}
+\newcommand{\Arms}{\mathcal{A}}
+\newcommand{\Alt}{\mathrm{Alt}}
+\newcommand{\note}[1]{\textcolor{red}{\textbf{#1}}}
+
+\def\simplex{\Sigma}
+\def\X{\mathbf{X}}
+\def\Zt{\tilde{Z}}
+\def\Tt{\tilde{T}}
+
+
+
+% Coloring and working together
+\def \red{\color{red}}
+\def \black{\color{black}}
+

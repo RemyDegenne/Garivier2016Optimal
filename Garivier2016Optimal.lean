@@ -1,3 +1,3 @@
 module  -- shake: keep-all --deprecated_module: ignore
 
-public import PaperLib.PaperResults.Basic
+public import Garivier2016Optimal.GK2016.Basic

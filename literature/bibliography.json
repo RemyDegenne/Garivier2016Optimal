@@ -1,8 +1,8 @@
 {
-  "PAPERKEY": {
+  "GK16": {
     "uri": "",
     "citation": {
-      "id": "PAPERKEY",
+      "id": "GK16",
       "type": "article",
       "title": "<title of the paper>",
       "author": [{"family": "<family name>", "given": "<given name>"}],

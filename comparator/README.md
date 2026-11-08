@@ -2,7 +2,7 @@
 
 Machine-checkable verification, with [leanprover/comparator](https://github.com/leanprover/comparator),
 that this repository proves the headline results claimed in [`formalization.yaml`](../formalization.yaml)
-without having to read or trust the Lean development in `PaperLib/`.
+without having to read or trust the Lean development in `Garivier2016Optimal/`.
 
 **Status.** <Which challenges are proved, when `scripts/comparator-verify.sh` last passed and how
 (`--insecure` or sandboxed).>
@@ -13,7 +13,7 @@ project modules, no sibling helpers.
 
 ## The trust story
 
-For each headline theorem `PaperLib.<name>` there is a challenge file `Challenge_<name>.lean` and a
+For each headline theorem `Garivier2016Optimal.<name>` there is a challenge file `Challenge_<name>.lean` and a
 config `<name>.json`; the list is `targets.txt`:
 
 | paper result | challenge(s) |

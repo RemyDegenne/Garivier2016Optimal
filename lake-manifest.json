@@ -15,7 +15,7 @@
    "type": "git",
    "subDir": null,
    "scope": "",
-   "rev": "b4e0ab91c5cdec7e1249a78d5dab29dc3ab0d0d4",
+   "rev": "5113b88ad95f3db0d11e984acaf45df3e6fd78a9",
    "name": "LMLExplore",
    "manifestFile": "lake-manifest.json",
    "inputRev": "main",
@@ -171,6 +171,6 @@
    "inputRev": "main",
    "inherited": true,
    "configFile": "lakefile.lean"}],
- "name": "PaperLib",
+ "name": "Garivier2016Optimal",
  "lakeDir": ".lake",
  "fixedToolchain": false}
