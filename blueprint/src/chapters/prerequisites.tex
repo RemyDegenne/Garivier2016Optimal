@@ -46,20 +46,23 @@ not provide yet. Their Lean code goes to the library's \texttt{ForLMLExplore/} f
   \lean{LMLExplore.Identification.isOpen_answerSet_baiTask_restrict,
     LMLExplore.Identification.continuousWithinAt_altCost_baiTask_restrict}
   \leanok
-  For arms in a nondegenerate exponential family and best arm identification restricted to the
-  vectors of means of the family, the models with unique best arm $a$ form an open set, and at
-  every such model $\mu$, $(\mu', w) \mapsto D(\mu', w, \neg a)$ is continuous within
-  $\R^K \times \Sk$ at $(\mu, w)$ for every $w \in \Sk$. These are the continuity hypotheses of
-  LMLExplore's sample complexity bounds for Track-and-Stop. LMLExplore proves the continuity as a
-  private lemma, which the port makes public.
+  For best arm identification restricted to an open set of vectors of means, such as the vectors
+  of means of a nondegenerate exponential family, the models with unique best arm $a$ form an open
+  set. For arms in a nondegenerate exponential family and best arm identification restricted to
+  the vectors of means of the family, at every model $\mu$ with unique best arm $a$,
+  $(\mu', w) \mapsto D(\mu', w, \neg a)$ is continuous within $\R^K \times \Sk$ at $(\mu, w)$ for
+  every $w \in \Sk$. These are the continuity hypotheses of LMLExplore's sample complexity bounds
+  for Track-and-Stop. LMLExplore proves the continuity as a private lemma; LMLExplore pull request
+  \#242 makes it public and adds the openness.
 \end{lemma}
 
 \begin{proof}
   \leanok
-  The closed form of \cref{lem:pair_cost} is continuous on the vectors of means of the family with
-  best arm $a$ and the nonnegative allocations, a neighbourhood of $(\mu, w)$ within
-  $\R^K \times \Sk$; the models with unique best arm $a$ are an intersection of finitely many
-  strict inequalities between means, and the set of means of the family is open.
+  The models with unique best arm $a$ are an intersection of finitely many strict inequalities
+  between means, intersected with the open set of the restriction. The closed form of
+  \cref{lem:pair_cost} is continuous on the vectors of means of the family with best arm $a$ and
+  the nonnegative allocations, a neighbourhood of $(\mu, w)$ within $\R^K \times \Sk$, since the
+  set of means of the family is open.
 \end{proof}
 
 \begin{lemma}

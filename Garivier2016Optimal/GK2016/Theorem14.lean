@@ -80,7 +80,11 @@ private lemma eventually_mem_M_and_rec_eq [Finite α] (hρ : ∀ c, ¬ id =ᵐ[�
       μ ∈ ((baiTask ν id).restrict {μ' | ∀ a, μ' a ∈ ρ.expFamilyMeans id}).answerSet a := by
     rw [IdentTask.answerSet_restrict]
     exact ⟨(mem_answerSet_baiTask_iff ν id).2 ha, hμ⟩
-  filter_upwards [(isOpen_answerSet_baiTask_restrict ν hρ a).mem_nhds h_mem] with μ' hμ'
+  have hS : IsOpen {μ' : α → ℝ | ∀ a, μ' a ∈ ρ.expFamilyMeans id} := by
+    rw [Set.ofPred_forall]
+    exact isOpen_iInter_of_finite fun c ↦
+      (Measure.isOpen_expFamilyMeans hρ).preimage (continuous_apply c)
+  filter_upwards [(isOpen_answerSet_baiTask_restrict ν hS a).mem_nhds h_mem] with μ' hμ'
   have h_best := hμ'
   rw [IdentTask.answerSet_restrict, Set.mem_inter_iff, mem_answerSet_baiTask_iff] at h_best
   rw [IdentTask.mem_answerSet_iff] at hμ'

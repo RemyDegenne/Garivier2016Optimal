@@ -10,24 +10,24 @@ public import LMLExplore.Identification.Task.BestArm
 /-!
 # Best arm identification near a vector of means of an exponential family
 
-For best arm identification with arms in an exponential family, restricted to the vectors of means
-of the family, and a vector of means `μ` of the family with unique best arm `a`:
-
-* the models with unique best arm `a` form an open set, so that the vectors of means near `μ` are
-  models of the restricted task with unique best arm `a`;
-* `(μ', w) ↦ D(μ', w, ¬a)` is continuous within `univ ×ˢ simplex α` at `(μ, w)`, for every
-  allocation `w` of the simplex.
+For best arm identification restricted to an open set `S` of vectors of means, the models with
+unique best arm `a` form an open set, so that the vectors of means near a model with unique best
+arm `a` are models of the restricted task with unique best arm `a`. For arms in an exponential
+family, restricted to the vectors of means of the family, and a vector of means `μ` of the family
+with unique best arm `a`, `(μ', w) ↦ D(μ', w, ¬a)` is continuous within `univ ×ˢ simplex α` at
+`(μ, w)`, for every allocation `w` of the simplex.
 
 The sample complexity bounds of Track-and-Stop (`Identification/TrackAndStop.lean`) take the
-second statement, and the recommendation of `a` near `μ`, as hypotheses, so that applying them to
-best arm identification needs both. LMLExplore proves the continuity as a private lemma of
+continuity, and the recommendation of `a` near `μ`, as hypotheses, so that applying them to best
+arm identification needs both. LMLExplore proves the continuity as a private lemma of
 `Identification/Task/BestArm.lean`, which its continuity of the value and upper hemicontinuity of
-the optimal allocations use; the port makes that lemma public.
+the optimal allocations use. LMLExplore pull request #242 makes that lemma public and adds the
+openness, with the statements of this file.
 
 ## Main statements
 
-* `LMLExplore.Identification.isOpen_answerSet_baiTask_restrict`: the models of the restricted task
-  with unique best arm `a` form an open set.
+* `LMLExplore.Identification.isOpen_answerSet_baiTask_restrict`: for an open set `S`, the models
+  of the task restricted to `S` with unique best arm `a` form an open set.
 * `LMLExplore.Identification.continuousWithinAt_altCost_baiTask_restrict`: the continuity of the
   cost of the alternatives at `(μ, w)`, within `univ ×ˢ simplex α`.
 -/
@@ -44,13 +44,12 @@ variable {α 𝓨 : Type*} {mα : MeasurableSpace α} {m𝓨 : MeasurableSpace �
   (ν : (α → ℝ) → Kernel α 𝓨) [∀ μ, IsMarkovKernel (ν μ)] {ρ : Measure 𝓨} {T : 𝓨 → ℝ}
   {μ w : α → ℝ}
 
-/-- In best arm identification restricted to the vectors of means of a nondegenerate exponential
-family, the models with unique best arm `a` form an open set. -/
-lemma isOpen_answerSet_baiTask_restrict [Finite α] (hT : ∀ c, ¬ T =ᵐ[ρ] fun _ ↦ c) (a : α) :
-    IsOpen (((baiTask ν id).restrict {μ' | ∀ c, μ' c ∈ ρ.expFamilyMeans T}).answerSet a) := by
-  rw [IdentTask.answerSet_restrict, Set.ofPred_forall]
-  exact (isOpen_answerSet_baiTask ν a).inter
-    (isOpen_iInter_of_finite fun c ↦ (isOpen_expFamilyMeans hT).preimage (continuous_apply c))
+/-- For an open set `S` of vectors of means, the models of best arm identification restricted to
+`S` with unique best arm `a` form an open set. -/
+lemma isOpen_answerSet_baiTask_restrict [Finite α] {S : Set (α → ℝ)} (hS : IsOpen S) (a : α) :
+    IsOpen (((baiTask ν id).restrict S).answerSet a) := by
+  rw [IdentTask.answerSet_restrict]
+  exact (isOpen_answerSet_baiTask ν a).inter hS
 
 variable [Fintype α]
 
@@ -58,8 +57,10 @@ variable [Fintype α]
 with divergence `d` (as in `continuousOn_altCost_baiTask_restrict`): at a vector of means `μ` of
 the family with unique best arm `a`, `(μ', w) ↦ D(μ', w, ¬a)` is continuous within
 `univ ×ˢ simplex α` at `(μ, w)` for every allocation `w` of the simplex. This is the continuity
-hypothesis of the sample complexity bounds of Track-and-Stop
-(`IdentTask.eventually_expectedStoppingTime_trackAndStop_le_of_charTime_lt` and
+hypothesis of the continuity of the value and of the upper hemicontinuity of the optimal
+allocations (`IdentTask.continuousWithinAt_answerValue`,
+`IdentTask.upperHemicontinuousWithinAt_optAlloc`), and of the sample complexity bounds of
+Track-and-Stop (`IdentTask.eventually_expectedStoppingTime_trackAndStop_le_of_charTime_lt`,
 `IdentTask.eventually_expectedStoppingTime_cTrackAndStop_le_of_charTime_lt`). -/
 lemma continuousWithinAt_altCost_baiTask_restrict (hT : ∀ c, ¬ T =ᵐ[ρ] fun _ ↦ c)
     (hν : ∀ μ μ' : α → ℝ, (∀ c, μ c ∈ ρ.expFamilyMeans T) → (∀ c, μ' c ∈ ρ.expFamilyMeans T) →

@@ -67,8 +67,9 @@ status:
     Phase 2, round of 2026-11-08: Theorem 1, Remark 2, Proposition 6 parts 1 and 2, and Theorem 14
     with D-tracking and with C-tracking are proved, as specializations of LMLExplore; Theorem 14
     needed the continuity of the cost of the alternatives near a model, which LMLExplore has as a
-    private lemma (ForLMLExplore/Identification/Task/BestArm.lean, PAPER_ROADMAP.md R14). Left:
-    Theorem 5, Proposition 6 part 3, Theorem 10, Proposition 12 and Proposition 13.
+    private lemma (ForLMLExplore/Identification/Task/BestArm.lean, PAPER_ROADMAP.md R14); the
+    refactor pull request LeanMachineLearning/LMLExplore#242 makes it public. Left: Theorem 5,
+    Proposition 6 part 3, Theorem 10, Proposition 12 and Proposition 13.
   sorry_count: 5
   sorry_in_definitions: 0
 
