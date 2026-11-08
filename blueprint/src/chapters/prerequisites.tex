@@ -5,17 +5,118 @@ The library-shaped results that the paper needs and that LMLExplore, LML, Tau Ce
 not provide yet. Their Lean code goes to the library's \texttt{ForLMLExplore/} folder, and
 \texttt{PAPER\_ROADMAP.md} says where each goes in LMLExplore.
 
+\begin{lemma}
+  \label{prereq:pair_cost_linear}
+  \lean{MeasureTheory.Measure.expFamilyPairCost_le_of_mem_expFamilyMeans}
+  \leanok
+  For an exponential family with divergence $d$, means $\mu_1, \mu_2$ of the family and
+  nonnegative weights $w_1, w_2$, the cost $w_1 d(\mu_1, m) + w_2 d(\mu_2, m)$ of moving $\mu_1$
+  and $\mu_2$ to their weighted mean $m$ is at most $w_1 d(\mu_1, z) + w_2 d(\mu_2, z)$ for every
+  mean $z$ of the family. So the cost of a pair is a minimum of functions linear in the weights,
+  and equal to the one with $z = m$ at the weights $(w_1, w_2)$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  If $w_1 = w_2 = 0$, both sides vanish. Otherwise $m$ is a mean of the family, and it minimizes
+  $z \mapsto w_1 d(\mu_1, z) + w_2 d(\mu_2, z)$ by the compensation identity
+  $w_1 d(\mu_1, z) + w_2 d(\mu_2, z) = w_1 d(\mu_1, m) + w_2 d(\mu_2, m) + (w_1 + w_2) d(m, z)$.
+\end{proof}
+
+\begin{lemma}
+  \label{prereq:div_mean_continuous}
+  \lean{MeasureTheory.Measure.continuousAt_expFamilyDiv_div}
+  \leanok
+  For means $\mu, \mu_1, \mu_2$ of the family, $(w_1, w_2) \mapsto
+  d(\mu, (w_1\mu_1 + w_2\mu_2)/(w_1 + w_2))$ is continuous at every pair of nonnegative weights
+  with $w_1 + w_2 > 0$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  The weighted mean is continuous there and is a mean of the family, which is open, and $d$ is
+  continuous on pairs of means.
+\end{proof}
+
+\begin{lemma}
+  \label{prereq:scalar_opt}
+  \lean{LMLExplore.Identification.mem_optAlloc_baiTask_restrict_of_sum_div_eq_one}
+  \leanok
+  \uses{lem:pair_cost, prereq:pair_cost_linear}
+  For arms in an exponential family and a vector of means $\mu$ with unique best arm $a$, let
+  $w \in \Sigma_K$ with $w_a > 0$ equalize the costs
+  $C_b(w) = w_a d(\mu_a, m_b) + w_b d(\mu_b, m_b)$ of the pairs $(a, b)$, $b \ne a$, where
+  $m_b = (w_a\mu_a + w_b\mu_b)/(w_a + w_b)$, and satisfy
+  $F = \sum_{b \ne a} d(\mu_a, m_b) / d(\mu_b, m_b) = 1$. Then $w$ is optimal.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  \uses{lem:pair_cost, prereq:pair_cost_linear}
+  Write $A_b = d(\mu_a, m_b)$ and $B_b = d(\mu_b, m_b)$, which is positive since $w_a > 0$ and
+  $\mu_b < \mu_a$ give $m_b \ne \mu_b$, and $D$ for the common value of the costs. For every
+  $x \in \Sigma_K$, $\sum_{b \ne a} (x_a A_b + x_b B_b) / B_b = x_a F + \sum_{b \ne a} x_b = 1$.
+  At $x = w$ this is $\sum_{b \ne a} D / B_b = 1$. Let $v \in \Sigma_K$. By
+  \cref{prereq:pair_cost_linear} with $z = m_b$, the cost of the pair $(a, b)$ at $v$ is at most
+  $v_a A_b + v_b B_b$. If all of them exceeded $D$, then
+  $1 = \sum_{b \ne a} D / B_b < \sum_{b \ne a} (v_a A_b + v_b B_b) / B_b = 1$. So some pair costs
+  at most $D$ at $v$, and by \cref{lem:pair_cost} the cost of the alternatives at $v$ is at most
+  its value $D$ at $w$.
+\end{proof}
+
+\begin{lemma}
+  \label{prereq:scalar_eq}
+  \lean{LMLExplore.Identification.sum_div_eq_one_of_mem_optAlloc_baiTask_restrict}
+  \leanok
+  \uses{lem:pair_cost, prereq:pair_cost_linear, prereq:div_mean_continuous}
+  For arms in an exponential family, a vector of means $\mu$ with unique best arm $a$ and at
+  least one other arm, the optimal allocation satisfies $F = 1$, with the notation of
+  \cref{prereq:scalar_opt}.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  \uses{lem:pair_cost, prereq:pair_cost_linear, prereq:div_mean_continuous}
+  The optimal allocation $w$ has positive entries (in LMLExplore). Suppose $F \ne 1$, and let
+  $S = \sum_{b \ne a} 1 / B_b > 0$. The direction $u$ with $u_a = S / (F - 1)$ and
+  $u_b = (1 - A_b u_a) / B_b$ for $b \ne a$ has $\sum_c u_c = u_a + S - F u_a = 0$ and
+  $u_a A_b + u_b B_b = 1$ for every $b \ne a$. Let $v = w + t u$, with $m'_b$ the weighted mean
+  of $\mu_a$ and $\mu_b$ at $v$. The cost of the pair $(a, b)$ at $v$ is
+  $v_a d(\mu_a, m'_b) + v_b d(\mu_b, m'_b)$, and its cost at $w$ is at most
+  $w_a d(\mu_a, m'_b) + w_b d(\mu_b, m'_b)$ (\cref{prereq:pair_cost_linear}), so the difference
+  is at least $t\,(u_a d(\mu_a, m'_b) + u_b d(\mu_b, m'_b))$. As $t \to 0$, the second factor tends
+  to $u_a A_b + u_b B_b = 1$ (\cref{prereq:div_mean_continuous}). So for some small $t > 0$, $v$
+  is in the simplex and every pair costs more at $v$ than at $w$: by \cref{lem:pair_cost}, the
+  cost of the alternatives is larger at $v$, which contradicts the optimality of $w$. The proof
+  needs neither a derivative of $d$ nor the inverses of the costs of the pairs, which the paper
+  uses.
+\end{proof}
+
 \begin{theorem}
   \label{prereq:scalar}
-  For arms in an exponential family and a vector of means with unique best arm $a$, the optimal
-  allocation is $x / \sum_c x_c$, with $x_a = 1$ and $x_b = g_b^{-1}(y^*)$ for $b \ne a$, where
-  $g_b(x) = d(\mu_a, m_b(x)) + x\, d(\mu_b, m_b(x))$ is a strictly increasing bijection from
-  $[0, \infty)$ onto $[0, d(\mu_a, \mu_b))$ and $y^*$ is the unique solution of $F(y) = 1$, for the
-  continuous increasing function
-  $F(y) = \sum_{b \ne a} d(\mu_a, m_b(x_b(y))) / d(\mu_b, m_b(x_b(y)))$ with $F(0) = 0$ and
-  $F(y) \to \infty$ as $y \to \min_{b \ne a} d(\mu_a, \mu_b)$ \cite[Theorem 5]{GK16}.
-  LMLRoadmaps: Identification 3.4.
+  \lean{LMLExplore.Identification.mem_optAlloc_baiTask_restrict_iff}
+  \leanok
+  \uses{lem:equalize, prereq:scalar_opt, prereq:scalar_eq}
+  For arms in an exponential family, a vector of means $\mu$ with unique best arm $a$ and at
+  least one other arm, an allocation $w$ is optimal if and only if $w \in \Sigma_K$, $w_a > 0$,
+  the costs of the pairs $(a, b)$, $b \ne a$, are equal, and
+  $\sum_{b \ne a} d(\mu_a, m_b) / d(\mu_b, m_b) = 1$, with the notation of
+  \cref{prereq:scalar_opt} \cite[Theorem 5]{GK16}. LMLRoadmaps: Identification 3.4.
+
+  The paper writes the costs of the pairs as $w_a g_b(w_b / w_a)$, with the increasing function
+  $g_b(x) = d(\mu_a, m_b(x)) + x\, d(\mu_b, m_b(x))$, and reduces the optimization to the scalar
+  equation $F(y) = 1$ in the common value $y$ of the $g_b$, through their inverses. The
+  properties of $g_b^{-1}$ and of $F$ as a function of $y$ (monotonicity, limits, the bisection)
+  are not formalized: the characterization above does not need them.
 \end{theorem}
+
+\begin{proof}
+  \leanok
+  \uses{lem:equalize, prereq:scalar_opt, prereq:scalar_eq}
+  The optimal allocation has positive entries (in LMLExplore), equalizes the costs of the pairs
+  (\cref{lem:equalize}) and satisfies $F = 1$ (\cref{prereq:scalar_eq}). Conversely,
+  \cref{prereq:scalar_opt}.
+\end{proof}
 
 \begin{lemma}
   \label{prereq:pair_cost_anti}

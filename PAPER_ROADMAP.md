@@ -10,7 +10,7 @@ Paper: RemyDegenne/Garivier2016Optimal · LMLExplore 5113b88ad95f · LMLRoadmaps
 | R2 | Closed form of the cost of the alternatives [GK16, Lemma 3] | exists | `LMLExplore.Identification.altCost_baiTask_restrict_eq_iInf_expFamilyPairCost` | – | |
 | R3 | The pair costs are equal at the optimal allocation [GK16, Lemma 4] | exists | `LMLExplore.Identification.answerValue_baiTask_restrict_eq_of_mem_optAlloc` | – | |
 | R4 | Existence and uniqueness of the optimal allocation [GK16, Theorem 5] | exists | `LMLExplore.Identification.exists_optAlloc_baiTask_restrict_eq_singleton` | – | |
-| R5 | The optimal allocation from the scalar equation `F(y*) = 1` [GK16, Theorem 5] | target | Identification 3.4 | todo | `ForLMLExplore/Identification/Task/BestArmScalar.lean` |
+| R5 | The optimal allocation from the scalar equation `F(y*) = 1` [GK16, Theorem 5] | target | Identification 3.4 | proved | `ForLMLExplore/Identification/Task/BestArmScalar.lean` |
 | R6 | Positivity and continuity of the optimal allocation [GK16, Proposition 6, parts 1–2] | exists | `LMLExplore.Identification.pos_of_mem_optAlloc_baiTask_restrict` | – | |
 | R7 | The optimal allocation is ordered like the means [GK16, Proposition 6, part 3] | staged | S1 | proved | `ForLMLExplore/Identification/Task/BestArmOrder.lean`, `ForLMLExplore/Probability/Distributions/ExponentialFamily/Mean.lean` |
 | R8 | C-tracking and D-tracking guarantees [GK16, Lemmas 7, 8, 15, 17, Proposition 9] | exists | `LMLExplore.Identification.CTracking.tendsto_pullCount_div` | – | |
@@ -31,6 +31,24 @@ Paper: RemyDegenne/Garivier2016Optimal · LMLExplore 5113b88ad95f · LMLRoadmaps
   arm-dependent known variances, not only for one exponential family as in the paper.
 - R5: Theorem 5 needs at least two arms, which the paper leaves implicit
   (`notes/statement-corrections.md`), so the library statement needs an arm `b ≠ a`, as `betaAnswerValue_baiTask_restrict_pos` does.
+- R5: proved for one exponential family, every statistic `T`, as the characterization of the
+  optimal allocation `w` itself (`mem_optAlloc_baiTask_restrict_iff`): `w a > 0`, equal costs of
+  the pairs and `∑_{b ≠ a} d(μ a, m_b) / d(μ b, m_b) = 1` for the weighted means `m_b` of `w`. The
+  paper's form in `x = w / w a` and `y` follows by homogeneity. Only the direction
+  `sum_div_eq_one_of_mem_optAlloc_baiTask_restrict` needs the arm `b ≠ a`;
+  `mem_optAlloc_baiTask_restrict_of_sum_div_eq_one` does not. The proof uses no derivative of `d`
+  and no inverse of the costs of the pairs: the cost of a pair is a minimum of functions linear in
+  the weights (`expFamilyPairCost_le_of_mem_expFamilyMeans`), which gives the optimality by
+  duality and, with the continuity of the weighted divergences (`continuousAt_expFamilyDiv_div`),
+  the equation at the optimum by a first-order perturbation. The same argument works whenever the
+  inner infimum of each pair has a minimizer continuous in the weights, as Identification 3.4
+  asks for per-arm families, but LMLExplore has the closed form of the cost of the alternatives
+  [GK16, Lemma 3] for one family only, so the general case waits for it. The two lemmas on the
+  pair cost go to LMLExplore's `Probability/Distributions/ExponentialFamily/Mean.lean`, after
+  `expFamilyPairCost_le_mul_expFamilyDiv_add_mul_expFamilyDiv`, and the three theorems to
+  `Identification/Task/BestArm.lean`, after `exists_optAlloc_baiTask_restrict_eq_singleton`. The
+  monotonicity of the inverses `g_b⁻¹` and of `F` in `y`, which the paper's bisection uses, is not
+  formalized.
 - R6: continuity is `LMLExplore.Identification.continuousAt_of_mem_optAlloc_baiTask_restrict`.
 - R7: proved without the scalar equation of R5, from the equality of the pair costs at the
   optimal allocation [GK16, Lemma 4] and two monotonicity properties of the pair cost: it

@@ -4,6 +4,7 @@ public import Garivier2016Optimal.ForLMLExplore.Identification.AlmostSure
 public import Garivier2016Optimal.ForLMLExplore.Identification.DeviationalThreshold
 public import Garivier2016Optimal.ForLMLExplore.Identification.Task.BestArm
 public import Garivier2016Optimal.ForLMLExplore.Identification.Task.BestArmOrder
+public import Garivier2016Optimal.ForLMLExplore.Identification.Task.BestArmScalar
 public import Garivier2016Optimal.ForLMLExplore.Probability.Distributions.ExponentialFamily.Mean
 public import Garivier2016Optimal.ForLMLExplore.Probability.Martingale.RateFunction
 public import Garivier2016Optimal.ForLMLExplore.SequentialLearning.ExpFamilyDeviation

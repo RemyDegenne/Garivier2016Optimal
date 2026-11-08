@@ -87,9 +87,14 @@ status:
     peeling of the numbers of pulls of each arm over dyadic slices in LML's reward stream model
     (ForLMLExplore/SequentialLearning/RateFunctionDeviation.lean), from the exponential
     supermartingale bound for i.i.d. sums (ForLMLExplore/Probability/Martingale/RateFunction.lean).
-    Left: Theorem 10, and Theorem 5, unblocked by the decision of 2026-11-08 that it assumes a
-    second arm.
-  sorry_count: 2
+    Phase 2, round of 2026-11-08 (the scalar equation): Theorem 5 is proved, with the second arm
+    of the decision of 2026-11-08, from the characterization of the optimal allocation of best
+    arm identification by equal costs of the pairs and the equation F = 1
+    (ForLMLExplore/Identification/Task/BestArmScalar.lean, PAPER_ROADMAP.md R5): by duality, since
+    the cost of each pair is a minimum of functions linear in the allocation, and by a
+    first-order perturbation at the optimum, with no derivative of the divergence.
+    Left: Theorem 10.
+  sorry_count: 1
   sorry_in_definitions: 0
 
 alignment:
@@ -117,7 +122,7 @@ alignment:
     - source: "thm:scalar — Theorem 5, the optimal allocation from a scalar equation"
       lean: "Garivier2016Optimal.mem_optAlloc_iff_exists_scalar"
       module: "Garivier2016Optimal.GK2016.Theorem5"
-      status: "stated"
+      status: "proved"
       relation: "closeMatch"
       note: >-
         Equation form: weights x with x_a = 1 and equal pair costs y, instead of x_b = g_b⁻¹(y).

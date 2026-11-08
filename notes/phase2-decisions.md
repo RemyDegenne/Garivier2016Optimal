@@ -268,3 +268,56 @@ Decisions taken in the unattended rounds of `scripts/formalize.sh`, by date.
   `python3 scripts/check-blueprint.py`, `leanblueprint pdf`, `leanblueprint web` and
   `lake exe checkdecls blueprint/lean_decls`. No definition in the closure of a headline
   statement changed, so `lake build Comparator` was not needed.
+
+## 2026-11-08: the scalar equation (Theorem 5)
+
+- **Job and area.** Advance. Tag, Refresh and Refactor pull request did not apply: LMLRoadmaps
+  `main` is still `d01bdd6b89ce`, and the paper's only pull request, LMLExplore#242 (R14), is
+  open with status `PR #242`. Of the two results left, Theorem 5 (R5) depends only on what
+  LMLExplore proves about the optimal allocation, and the user's decision of 2026-11-08 gave it
+  the second arm it needed. Theorem 10 (R9) needs the Krichevsky–Trofimov mixture bound and a
+  change of measure to a Bayesian model, a larger area left for a later round.
+- **Route.** The paper reduces the optimization to the scalar `y`, through the inverses
+  `x_b(y) = g_b⁻¹(y)` of the costs of the pairs, and differentiates `y / (1 + ∑ x_b(y))`. That
+  needs the derivative of `g_b`, hence of the divergence, and inverse functions. The proof here
+  uses neither. The cost of a pair is the minimum over the means `z` of
+  `w a d(μ a, z) + w b d(μ b, z)`. So it is below the linear function `v ↦ v a A_b + v b B_b` of
+  the allocation, with `A_b = d(μ a, m_b)` and `B_b = d(μ b, m_b)` at the weighted mean `m_b` of
+  `w`, and equal to it at `w`.
+  - `⇐` by duality: the combination of the linear bounds with the weights `1 / B_b` is
+    `v a F + ∑_{b ≠ a} v b = 1` for every allocation `v`, and `∑_{b ≠ a} D / B_b` at `w`, where
+    `D` is the common cost. So some pair costs at most `D` at `v`.
+  - `⇒` by a first-order perturbation: if `F ≠ 1`, the direction `u` with
+    `u a = (∑_{b ≠ a} 1 / B_b) / (F - 1)` and `u a A_b + u b B_b = 1` keeps the sum of the weights.
+    Along it, the cost of every pair grows by at least `t (u a A'_b + u b B'_b)`, at the weighted
+    means of `w + t u`, and the second factor tends to `1`. This only needs the continuity of the
+    divergence and the positivity of the optimal allocation (LMLExplore). This direction does not
+    need Lemma 4, which only gives the equal costs on the right-hand side.
+- **The library statement.** `LMLExplore.Identification.mem_optAlloc_baiTask_restrict_iff`
+  characterizes the optimal allocation `w` itself: `w` in the simplex, `w a > 0`, equal costs of
+  the pairs, and `∑_{b ≠ a} d(μ a, m_b) / d(μ b, m_b) = 1`. It holds for every statistic `T`,
+  as LMLExplore's results on best arm identification do. The two directions are separate lemmas.
+  Only `⇒` needs an arm `b ≠ a`. `⇐` needs `w a > 0`, not the positivity of all the entries. The
+  paper's form follows by homogeneity (`expFamilyPairCost_mul`), with `x = w / w a` and `y` the
+  common cost divided by `w a`. Identification 3.4 asks for the scalar equation whenever the
+  inner infimum has a unique minimizer, for per-arm families too. The argument extends to them,
+  given a minimizer continuous in the weights. But LMLExplore has the closed form of the cost of
+  the alternatives [GK16, Lemma 3] for one family only, so the statement stays at LMLExplore's
+  current generality (PAPER_ROADMAP.md R5).
+- **Placement.** The two lemmas on the cost of a pair (`expFamilyPairCost_le_of_mem_expFamilyMeans`,
+  `continuousAt_expFamilyDiv_div`), in `MeasureTheory.Measure`, belong in LMLExplore's
+  `Probability/Distributions/ExponentialFamily/Mean.lean`. The copy of that file in
+  `ForLMLExplore/` is R7's, so to keep the items apart they are in R5's file
+  `ForLMLExplore/Identification/Task/BestArmScalar.lean`, and the roadmap note says where they
+  go. Only the equivalence is a `theorem`, as in the previous round.
+- **Not formalized.** The monotonicity and the limits of `g_b⁻¹` and of `F` as a function of `y`,
+  and the bisection. The frozen statement does not ask for them.
+- **The frozen statement.** Its file now imports the new library file instead of
+  `LMLExplore.Identification.Task.BestArm`. A scratch file elaborated the challenge's statement
+  next to the solution: the types are the same `Expr`, with the same universe names, and the
+  axioms are `propext`, `Classical.choice` and `Quot.sound`. All its hypotheses are used.
+- **Checks.** `scripts/check-build.sh` (1 declaration uses `sorry`, Theorem 10, no other
+  warning), `lake exe runLinter Garivier2016Optimal`, `scripts/check-forlmlexplore.sh`,
+  `python3 scripts/check-blueprint.py`, `leanblueprint pdf`, `leanblueprint web` and
+  `lake exe checkdecls blueprint/lean_decls`. No definition in the closure of a headline
+  statement changed, so `lake build Comparator` was not needed.

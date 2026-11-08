@@ -124,8 +124,11 @@ The paper states it for $\delta \in (0, 1)$, which is false beyond $1/2$
 \end{theorem}
 
 \begin{proof}
+  \leanok
   \uses{prereq:scalar}
-  The paper-level form of Part II, \cref{prereq:scalar}.
+  The paper-level form of Part II, \cref{prereq:scalar}: for $w$ optimal, $x = w / w_a$ and $y$
+  the common cost of the pairs divided by $w_a$; conversely, $w = x / \sum_c x_c$, whose pairs all
+  cost $y / \sum_c x_c$ by homogeneity, with the same weighted means as $x$.
 \end{proof}
 
 \begin{proposition}[{\cite[Proposition 6]{GK16}}]
