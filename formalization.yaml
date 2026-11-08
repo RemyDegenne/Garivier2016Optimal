@@ -64,7 +64,12 @@ status:
     which corrected Proposition 12 (erratum E2), and the comparator challenges are set up in
     comparator/. The lemmas of the paper that LMLExplore proves
     (Lemmas 3, 4, 7, 8, 15, 17 and 19, Proposition 9) are cited in the blueprint.
-  sorry_count: 11
+    Phase 2, round of 2026-11-08: Theorem 1, Remark 2, Proposition 6 parts 1 and 2, and Theorem 14
+    with D-tracking and with C-tracking are proved, as specializations of LMLExplore; Theorem 14
+    needed the continuity of the cost of the alternatives near a model, which LMLExplore has as a
+    private lemma (ForLMLExplore/Identification/Task/BestArm.lean, PAPER_ROADMAP.md R14). Left:
+    Theorem 5, Proposition 6 part 3, Theorem 10, Proposition 12 and Proposition 13.
+  sorry_count: 5
   sorry_in_definitions: 0
 
 alignment:
@@ -79,14 +84,14 @@ alignment:
     - source: "thm:lower — Theorem 1, lower bound on the sample complexity"
       lean: "Garivier2016Optimal.charTime_mul_klBer_le_expectedStoppingTime"
       module: "Garivier2016Optimal.GK2016.Theorem1"
-      status: "stated"
+      status: "proved"
       relation: "narrowMatch"
       erratum: "E1"
       note: "For δ ≤ 1/2; the paper states it for δ ∈ (0, 1), which is false beyond 1/2."
     - source: "rem:lower_asymptotic — Remark 2, asymptotic lower bound"
       lean: "Garivier2016Optimal.eventually_mul_log_le_expectedStoppingTime"
       module: "Garivier2016Optimal.GK2016.Theorem1"
-      status: "stated"
+      status: "proved"
       relation: "closeMatch"
       note: "The liminf ≥ T*(μ) as: for every c < T*(μ), 𝔼[τ_δ] ≥ c log(1/δ) for small δ."
     - source: "thm:scalar — Theorem 5, the optimal allocation from a scalar equation"
@@ -98,12 +103,12 @@ alignment:
     - source: "prop:optalloc — Proposition 6, part 1, positivity"
       lean: "Garivier2016Optimal.pos_of_mem_optAlloc"
       module: "Garivier2016Optimal.GK2016.Proposition6"
-      status: "stated"
+      status: "proved"
       relation: "hasPart"
     - source: "prop:optalloc — Proposition 6, part 2, continuity"
       lean: "Garivier2016Optimal.continuousAt_of_mem_optAlloc"
       module: "Garivier2016Optimal.GK2016.Proposition6"
-      status: "stated"
+      status: "proved"
       relation: "hasPart"
     - source: "prop:optalloc — Proposition 6, part 3, ordering"
       lean: "Garivier2016Optimal.le_of_mem_optAlloc_of_le"
@@ -130,10 +135,10 @@ alignment:
     - source: "thm:expectation — Theorem 14, with D-tracking"
       lean: "Garivier2016Optimal.limsup_expectedStoppingTime_trackAndStop_div_log_le"
       module: "Garivier2016Optimal.GK2016.Theorem14"
-      status: "stated"
+      status: "proved"
       relation: "hasPart"
     - source: "thm:expectation — Theorem 14, with C-tracking"
       lean: "Garivier2016Optimal.limsup_expectedStoppingTime_cTrackAndStop_div_log_le"
       module: "Garivier2016Optimal.GK2016.Theorem14"
-      status: "stated"
+      status: "proved"
       relation: "hasPart"

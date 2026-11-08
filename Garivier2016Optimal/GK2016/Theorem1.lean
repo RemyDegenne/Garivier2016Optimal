@@ -60,7 +60,12 @@ theorem charTime_mul_klBer_le_expectedStoppingTime {A : IdentAlg Unit α ℝ α}
     (hμ : μ ∈ ((baiTask ν id).restrict {μ' | ∀ a, μ' a ∈ ρ.expFamilyMeans id}).M) :
     ((baiTask ν id).restrict {μ' | ∀ a, μ' a ∈ ρ.expFamilyMeans id}).charTime μ *
         klBer δ (1 - δ) ≤ expectedStoppingTime A (Environment.bandit (ν μ)) := by
-  sorry
+  have hμ' := hμ
+  rw [IdentTask.M_restrict, M_baiTask] at hμ'
+  obtain ⟨⟨a, ha⟩, -⟩ := hμ'
+  have h := hA.charTime_mul_le_expectedStoppingTime hδ hμ (i := a)
+    (by rw [IdentTask.correct_restrict]; exact (correct_baiTask_eq_singleton_iff ν id).2 ha)
+  simpa only [IdentTask.ν_restrict, ν_baiTask] using h
 
 /-- **Asymptotic lower bound** [GK16, Remark 2]. For a family `A δ` of `δ`-correct strategies for
 best arm identification on the vectors of means of the exponential family `(ρ, id)`, and every
@@ -73,6 +78,12 @@ theorem eventually_mul_log_le_expectedStoppingTime {A : ℝ → IdentAlg Unit α
     (hc : c < ((baiTask ν id).restrict {μ' | ∀ a, μ' a ∈ ρ.expFamilyMeans id}).charTime μ) :
     ∀ᶠ δ in 𝓝[>] 0, c * ENNReal.ofReal (Real.log (1 / δ)) ≤
       expectedStoppingTime (A δ) (Environment.bandit (ν μ)) := by
-  sorry
+  have hμ' := hμ
+  rw [IdentTask.M_restrict, M_baiTask] at hμ'
+  obtain ⟨⟨a, ha⟩, -⟩ := hμ'
+  lift c to ℝ≥0 using hc.ne_top
+  have h := IdentTask.eventually_mul_ofReal_log_le_expectedStoppingTime hA hμ (i := a)
+    (by rw [IdentTask.correct_restrict]; exact (correct_baiTask_eq_singleton_iff ν id).2 ha) hc
+  simpa only [IdentTask.ν_restrict, ν_baiTask] using h
 
 end Garivier2016Optimal

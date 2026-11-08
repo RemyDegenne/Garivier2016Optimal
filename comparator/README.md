@@ -4,8 +4,9 @@ Machine-checkable verification, with [leanprover/comparator](https://github.com/
 that this repository proves the headline results claimed in [`formalization.yaml`](../formalization.yaml)
 without having to read or trust the Lean development in `Garivier2016Optimal/`.
 
-**Status.** No challenge is proved yet: the statements were set up on 2026-11-08, at the end of
-phase 1.
+**Status.** The statements were set up on 2026-11-08, at the end of phase 1. Six challenges are
+proved in the project (Theorem 1, Remark 2, Proposition 6 parts 1 and 2, Theorem 14 with D- and
+C-tracking) and five are not yet; comparator has not been run on them.
 
 Each challenge is one file that imports LMLExplore and Mathlib modules only, no project modules
 and no sibling helpers.

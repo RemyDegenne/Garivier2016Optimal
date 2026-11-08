@@ -30,6 +30,7 @@ The paper states it for $\delta \in (0, 1)$, which is false beyond $1/2$
 (\texttt{notes/paper-errata.md}, E1).
 
 \begin{proof}
+  \leanok
   \uses{lem:transportation}
   A case of LMLExplore's lower bound for every identification task, \cref{lem:transportation}.
 \end{proof}
@@ -59,6 +60,7 @@ The paper states it for $\delta \in (0, 1)$, which is false beyond $1/2$
 \end{corollary}
 
 \begin{proof}
+  \leanok
   \uses{lem:lower_asymptotic_lml}
   A case of \cref{lem:lower_asymptotic_lml}.
 \end{proof}
@@ -138,8 +140,8 @@ The paper states it for $\delta \in (0, 1)$, which is false beyond $1/2$
 \begin{proof}
   \uses{prereq:ordering}
   Parts (1) and (2) are in LMLExplore (\texttt{pos\_of\_mem\_optAlloc\_baiTask\_restrict},
-  \texttt{continuousAt\_of\_mem\_optAlloc\_baiTask\_restrict}); part (3) is
-  \cref{prereq:ordering}.
+  \texttt{continuousAt\_of\_mem\_optAlloc\_baiTask\_restrict}), and their Lean statements here are
+  proved; part (3) is \cref{prereq:ordering}.
 \end{proof}
 
 \chapter{Track-and-Stop}
@@ -252,10 +254,14 @@ The paper claims a constant $C(\alpha, K)$ that does not depend on $\delta$, whi
 \end{theorem}
 
 \begin{proof}
-  \uses{lem:tas_lml, prop:optalloc}
+  \leanok
+  \uses{lem:tas_lml, prop:optalloc, prereq:bai_continuity}
   LMLExplore proves the stronger bound with $T^*(\mu)$ for every polynomial $r$,
-  \cref{lem:tas_lml}; the continuity and semicontinuity it assumes follow from
-  \cref{prop:optalloc} and the continuity of the costs.
+  \cref{lem:tas_lml}, and $T^*(\mu) \le \alpha T^*(\mu)$ since $\alpha \ge 1$. Near $\mu$, the
+  vectors of means have the same unique best arm (\cref{prereq:bai_continuity}), which the
+  recommendation returns, and the targets are their optimal allocations; the continuity of the
+  targets that D-tracking assumes is \cref{prop:optalloc}~(2), and the continuity of the costs
+  that both assume is \cref{prereq:bai_continuity}.
 \end{proof}
 
 \begin{lemma}

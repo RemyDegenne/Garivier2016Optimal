@@ -42,6 +42,27 @@ not provide yet. Their Lean code goes to the library's \texttt{ForLMLExplore/} f
 \end{lemma}
 
 \begin{lemma}
+  \label{prereq:bai_continuity}
+  \lean{LMLExplore.Identification.isOpen_answerSet_baiTask_restrict,
+    LMLExplore.Identification.continuousWithinAt_altCost_baiTask_restrict}
+  \leanok
+  For arms in a nondegenerate exponential family and best arm identification restricted to the
+  vectors of means of the family, the models with unique best arm $a$ form an open set, and at
+  every such model $\mu$, $(\mu', w) \mapsto D(\mu', w, \neg a)$ is continuous within
+  $\R^K \times \Sk$ at $(\mu, w)$ for every $w \in \Sk$. These are the continuity hypotheses of
+  LMLExplore's sample complexity bounds for Track-and-Stop. LMLExplore proves the continuity as a
+  private lemma, which the port makes public.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  The closed form of \cref{lem:pair_cost} is continuous on the vectors of means of the family with
+  best arm $a$ and the nonnegative allocations, a neighbourhood of $(\mu, w)$ within
+  $\R^K \times \Sk$; the models with unique best arm $a$ are an intersection of finitely many
+  strict inequalities between means, and the set of means of the family is open.
+\end{proof}
+
+\begin{lemma}
   \label{prereq:as}
   For the GLRT with thresholds $\beta_t(h, \delta) \le \log(1/\delta) + f(t)$, $f(t) = o(t)$, if
   almost surely the estimates converge to the model and the proportions of pulls to a set $W$ of

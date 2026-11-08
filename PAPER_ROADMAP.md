@@ -19,6 +19,7 @@ Paper: RemyDegenne/Garivier2016Optimal · LMLExplore 5113b88ad95f · LMLRoadmaps
 | R11 | The almost sure sample complexity bound of the GLRT [GK16, Proposition 13] | target | Identification 4.4 | todo | `ForLMLExplore/Identification/AlmostSure.lean` |
 | R12 | Expected sample complexity of Track-and-Stop [GK16, Theorem 14, Lemmas 19, 20] | exists | `LMLExplore.Identification.IdentTask.eventually_expectedStoppingTime_trackAndStop_le_of_charTime_lt` | – | |
 | R13 | The paper's statements, specializing the items above to its setting | paper | | todo | `GK2016/Theorem1.lean`, `GK2016/Theorem5.lean`, `GK2016/Proposition6.lean`, `GK2016/Theorem10.lean`, `GK2016/Proposition12.lean`, `GK2016/Proposition13.lean`, `GK2016/Theorem14.lean` |
+| R14 | Continuity of the cost of the alternatives of best arm identification near a model, and openness of its answer sets, for arms in an exponential family | refactor | `LMLExplore.Identification.continuousWithinAt_altCost_baiTask_restrict` | proved | `ForLMLExplore/Identification/Task/BestArm.lean` |
 
 ## Notes
 
@@ -44,6 +45,12 @@ Paper: RemyDegenne/Garivier2016Optimal · LMLExplore 5113b88ad95f · LMLRoadmaps
 - R12: LMLExplore proves `𝔼[τ_δ] ≤ c log(1/δ)` for every `c > T*(μ)`, stronger than the paper's
   `α T*(μ)`; the C-tracking form is
   `LMLExplore.Identification.IdentTask.eventually_expectedStoppingTime_cTrackAndStop_le_of_charTime_lt`.
+- R14: `continuousWithinAt_altCost_baiTask_restrict` is a private lemma of LMLExplore's
+  `Identification/Task/BestArm.lean`, and the Track-and-Stop bounds of R12 take its conclusion as a
+  hypothesis, so that applying them to best arm identification needs it public. The port makes it
+  public, in place, and adds `isOpen_answerSet_baiTask_restrict` next to `isOpen_answerSet_baiTask`:
+  the models of the restricted task with unique best arm `a` form an open set, which gives the
+  recommendation of `a` near `μ` that the same bounds assume.
 
 ## Proposed targets
 

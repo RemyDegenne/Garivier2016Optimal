@@ -55,8 +55,9 @@ theorem pos_of_mem_optAlloc (hρ : ∀ c, ¬ id =ᵐ[ρ] fun _ ↦ c)
     (hμ : ∀ b, μ b ∈ ρ.expFamilyMeans id) (ha : ∀ b ≠ a, μ b < μ a) {w : α → ℝ}
     (hw : w ∈ ((baiTask ν id).restrict {μ' | ∀ b, μ' b ∈ ρ.expFamilyMeans id}).optAlloc μ a)
     (b : α) :
-    0 < w b := by
-  sorry
+    0 < w b :=
+  pos_of_mem_optAlloc_baiTask_restrict ν hρ hμ
+    (fun μ' hμ' c ↦ by rw [hν, hν]; exact Measure.klDiv_expFamily_natParam (hμ c) (hμ' c)) ha hw b
 
 /-- **The optimal allocation is continuous** [GK16, Proposition 6, part 2]. For arms in the
 exponential family `(ρ, id)` and a vector of means `μ` of the family with unique best arm `a`, every
@@ -66,8 +67,10 @@ theorem continuousAt_of_mem_optAlloc (hρ : ∀ c, ¬ id =ᵐ[ρ] fun _ ↦ c)
     (hμ : ∀ b, μ b ∈ ρ.expFamilyMeans id) (ha : ∀ b ≠ a, μ b < μ a) {w : (α → ℝ) → α → ℝ}
     (hw : ∀ᶠ μ' in 𝓝 μ,
       w μ' ∈ ((baiTask ν id).restrict {μ' | ∀ b, μ' b ∈ ρ.expFamilyMeans id}).optAlloc μ' a) :
-    ContinuousAt w μ := by
-  sorry
+    ContinuousAt w μ :=
+  continuousAt_of_mem_optAlloc_baiTask_restrict ν hρ
+    (fun μ₁ μ₂ h₁ h₂ c ↦ by rw [hν, hν]; exact Measure.klDiv_expFamily_natParam (h₁ c) (h₂ c))
+    hμ ha hw
 
 /-- **The optimal allocation is ordered like the means** [GK16, Proposition 6, part 3]. For arms
 in the exponential family `(ρ, id)` and a vector of means `μ` of the family with unique best arm
