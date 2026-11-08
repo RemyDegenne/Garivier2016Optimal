@@ -43,5 +43,10 @@ are numbered `E1`, `E2`, … and never renumbered.
   `r` that depends on `δ` with `log r(t) = o(log(1/δ))`, as the corrected `C` does.
 - **Lean:** `Garivier2016Optimal.exists_measureReal_glrt_expFamilyEvidence_le` takes `δ` before
   the existential `C`; the constant still depends neither on the family nor on the sampling rule.
+  Its proof (round of 2026-11-08) does not follow Appendix C: it peels the numbers of pulls of each
+  arm over dyadic slices and combines the arms by independence in the reward stream model. It
+  gives `C = δ exp (c_{α,K} + 2 x_δ)` with `c_{α,K} = 2 K log (2 / (1 - 2^{-α/(2K)}))` and
+  `x_δ = log (1/δ) + 2K (1 + log (1 + log (1/δ)))`, so `log (C t^α / δ) = α log t + c_{α,K} + 2 x_δ`,
+  for every `α > 0`.
 - **Kind:** wrong dependence of a constant, from an error in the last step of the proof.
 - **Found:** check of the statements against the paper, 2026-11-08.

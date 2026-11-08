@@ -15,7 +15,7 @@ Paper: RemyDegenne/Garivier2016Optimal · LMLExplore 5113b88ad95f · LMLRoadmaps
 | R7 | The optimal allocation is ordered like the means [GK16, Proposition 6, part 3] | staged | S1 | proved | `ForLMLExplore/Identification/Task/BestArmOrder.lean`, `ForLMLExplore/Probability/Distributions/ExponentialFamily/Mean.lean` |
 | R8 | C-tracking and D-tracking guarantees [GK16, Lemmas 7, 8, 15, 17, Proposition 9] | exists | `LMLExplore.Identification.CTracking.tendsto_pullCount_div` | – | |
 | R9 | The Krichevsky–Trofimov mixture and the informational threshold for Bernoulli arms [GK16, Lemma 11, Theorem 10] | target | Identification 4.2 | todo | `ForLMLExplore/Identification/KTThreshold.lean` |
-| R10 | The deviational thresholds `log(C t^α/δ)` [GK16, Proposition 12] | target | Identification 4.2 | todo | `ForLMLExplore/Identification/DeviationalThreshold.lean` |
+| R10 | The deviational thresholds `log(C t^α/δ)` [GK16, Proposition 12] | target | Identification 4.2 | proved | `ForLMLExplore/Identification/DeviationalThreshold.lean`, `ForLMLExplore/SequentialLearning/ExpFamilyDeviation.lean`, `ForLMLExplore/SequentialLearning/RateFunctionDeviation.lean`, `ForLMLExplore/Probability/Martingale/RateFunction.lean` |
 | R11 | The almost sure sample complexity bound of the GLRT [GK16, Proposition 13] | target | Identification 4.4 | proved | `ForLMLExplore/Identification/AlmostSure.lean`, `ForLMLExplore/SequentialLearning/SumRewards.lean` |
 | R12 | Expected sample complexity of Track-and-Stop [GK16, Theorem 14, Lemmas 19, 20] | exists | `LMLExplore.Identification.IdentTask.eventually_expectedStoppingTime_trackAndStop_le_of_charTime_lt` | – | |
 | R13 | The paper's statements, specializing the items above to its setting | paper | | todo | `GK2016/Basic.lean`, `GK2016/Theorem1.lean`, `GK2016/Theorem5.lean`, `GK2016/Proposition6.lean`, `GK2016/Theorem10.lean`, `GK2016/Proposition12.lean`, `GK2016/Proposition13.lean`, `GK2016/Theorem14.lean` |
@@ -51,6 +51,20 @@ Paper: RemyDegenne/Garivier2016Optimal · LMLExplore 5113b88ad95f · LMLRoadmaps
   `δ` (`notes/paper-errata.md`, E2). Identification 4.2 asks for an explicit `C(α, K)`, for arms
   dominated by any exponential families, from the two-sided bound of Layer 1.2; prove it with an
   explicit `C(α, K, δ)` instead, from which the paper's corrected existential `C` follows.
+  Proved so, for every task on vectors of means, arms dominated by any exponential families,
+  every sampling rule and every `α > 0`, with `C ≥ δ exp (c_{α,K} + 2 x_δ)`,
+  `c_{α,K} = 2 K log (2 / (1 - exp (-(α log 2 / (2 K)))))` and LMLExplore's level `x_δ`
+  (`IdentTask.measureReal_histOutputMeasure_glrt_expFamilyEvidence_log_mul_rpow_div_le`,
+  `IdentTask.isDeltaPAC_glrt_expFamilyEvidence_log_mul_rpow_div`). The route is not the
+  two-sided bound of Layer 1.2 and a union bound over `t`, but a peeling of the numbers of pulls of
+  each arm over dyadic slices, as in [GC11, Theorem 10], with the exponential supermartingale
+  bound of Layer 4.2 for i.i.d. sums (`iIndepFun.measure_exists_le_and_gt_and_lt_rateFunction_le`,
+  for `Probability/Martingale/RateFunction.lean`), then [LS, Proposition 33.9] over the arms and
+  the joint transfer to runs. The peeled bounds go next to LMLExplore's union-bound ones, in
+  `SequentialLearning/RateFunctionDeviation.lean` and `SequentialLearning/ExpFamilyDeviation.lean`,
+  and the thresholds in `Identification/ExpFamilyThreshold.lean`. The private lemma
+  `streamMeasure_exists_mul_rateFunction_eq_top` of LMLExplore's `RateFunctionDeviation.lean` is
+  restated privately; a port shares it.
 - R11: Identification 4.4 states it for any statistic with thresholds `log(1/δ) + o(t)`, any
   estimator converging almost surely and proportions converging to a set `W` of allocations, with
   every `c > (inf_{w ∈ W} D(θ, w, ¬i))⁻¹`; the paper's `α T*(μ)` is a case.

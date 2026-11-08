@@ -78,12 +78,116 @@ not provide yet. Their Lean code goes to the library's \texttt{ForLMLExplore/} f
 \end{lemma}
 
 \begin{lemma}
-  \label{prereq:deviational}
-  For arms dominated by exponential families, every $\alpha > 1$ and every $\delta \in (0, 1)$,
-  there is an explicit $C(\alpha, K, \delta)$ such that the GLRT with the threshold
-  $\log(C t^\alpha / \delta)$ is $\delta$-correct whatever the sampling rule
-  \cite[Proposition 12]{GK16}. LMLRoadmaps: Identification 4.2.
+  \label{prereq:iid_slice}
+  \lean{ProbabilityTheory.iIndepFun.measure_exists_le_and_gt_and_lt_rateFunction_le,
+    ProbabilityTheory.iIndepFun.measure_exists_le_and_lt_and_le_mul_rateFunction_le}
+  \leanok
+  Let $Z_0, Z_1, \dots$ be i.i.d.\ with the law of an integrable $Y$, with rate function $I$, and
+  let $\hat\mu_n$ be the mean of $Z_0, \dots, Z_{n-1}$. For $a > 0$ and $r \ge 0$,
+  $\Prob(\exists n \ge a,\ \hat\mu_n > \E[Y],\ I(\hat\mu_n) > r) \le e^{-ar}$. For $a > 0$ and
+  $z > 0$, $\Prob(\exists n,\ a \le n < b,\ n I(\hat\mu_n) \ge z) \le 2 e^{-az/b}$.
 \end{lemma}
+
+\begin{proof}
+  \leanok
+  Along the filtration of the past variables, $Z_n$ is independent of the past, so its
+  conditional moment generating function is that of $Y$, and the first bound is LMLExplore's
+  time-uniform Chernoff bound with the rate function, with every variable selected. For the
+  second, $n I(\hat\mu_n) \ge z$ with $n < b$ forces $I(\hat\mu_n) > z/b$, which vanishes at the
+  mean; above the mean this is the first bound with $r = z/b$, and below the mean the first bound
+  for $-Z$ and $-Y$.
+\end{proof}
+
+\begin{lemma}
+  \label{prereq:peeled_arm}
+  \lean{LMLExplore.streamMeasure_exists_two_mul_add_le_mul_rateFunction_le}
+  \leanok
+  \uses{prereq:iid_slice}
+  In the reward stream model, for an arm with integrable rewards and rate function $I_a$, every
+  $\eta > 0$ and $y \ge 0$, with $\kappa_\eta = \log(2/(1 - e^{-\eta}))$,
+  $\Prob(\exists s,\ s I_a(\hat\mu_s) \ge 2(\eta \lfloor\log_2 s\rfloor + \kappa_\eta + y))
+  \le e^{-y}$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  \uses{prereq:iid_slice}
+  A deviation with $s \ge 1$ rewards lies on the dyadic slice $2^k \le s < 2^{k+1}$ with
+  $k = \lfloor\log_2 s\rfloor$, and at $s = 0$ there is none. By \cref{prereq:iid_slice} with
+  $a = 2^k$ and $b = 2^{k+1}$, the slice $k$ has probability at most
+  $2 e^{-(\eta k + \kappa_\eta + y)}$, and these sum to
+  $2 e^{-\kappa_\eta - y} / (1 - e^{-\eta}) = e^{-y}$.
+\end{proof}
+
+\begin{lemma}
+  \label{prereq:peeled_joint}
+  \lean{LMLExplore.streamMeasure_exists_two_mul_card_mul_add_le_sum_mul_rateFunction_le,
+    LMLExplore.measure_exists_two_mul_card_mul_add_le_sum_pullCount_mul_rateFunction_le,
+    LMLExplore.measure_exists_two_mul_card_mul_add_le_sum_pullCount_mul_expFamilyRate_le}
+  \leanok
+  \uses{prereq:peeled_arm}
+  Along a run of any algorithm, if the rewards of each arm are integrable with rate function
+  $I_a$, then for $\eta > 0$ and $x \ge K$,
+  $\Prob(\exists t,\ \sum_a N_a(t) I_a(\hat\mu_a(t)) \ge
+  2(K(\eta \lfloor\log_2 t\rfloor + \kappa_\eta) + x)) \le (x/K)^K e^{K - x}$. For arms dominated
+  by members of exponential families, the same holds with the extended divergences
+  $\bar d_a(\hat\mu_a(t), \mu_a)$ in place of $I_a(\hat\mu_a(t))$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  \uses{prereq:peeled_arm}
+  In the stream model the arms are independent, and \cref{prereq:peeled_arm} gives each half
+  statistic $s I_a(\hat\mu_s)/2$ the exponential tail above the monotone function
+  $\eta \lfloor\log_2 s\rfloor + \kappa_\eta$ that \cite[Proposition 33.9]{LS} (in LMLExplore)
+  combines over the arms. LMLExplore's joint event transfer turns the stream bound into a bound
+  along the run, where $\sum_a N_a(t) = t$. The rate function of a dominated arm is at least the
+  extended divergence of its family.
+\end{proof}
+
+\begin{lemma}
+  \label{prereq:deviational_glrt}
+  \lean{LMLExplore.Identification.IdentTask.measure_exists_lt_expFamilyEvidence_le_of_le,
+    LMLExplore.Identification.IdentTask.measure_exists_lt_expFamilyEvidence_le_of_mul_log_le,
+    LMLExplore.Identification.IdentTask.measureReal_histOutputMeasure_glrt_expFamilyEvidence_le_of_mul_log_le}
+  \leanok
+  \uses{prereq:peeled_joint}
+  For every identification task on vectors of means, arms dominated by exponential families,
+  every sampling rule, $p > 0$ and $x \ge K$, the GLRT with the generalized likelihood ratio
+  evidence and thresholds at least $p \log n + c_{p,K} + 2x$ at every round $n \ge 1$, with
+  $c_{p,K} = 2K \log(2/(1 - e^{-p\log 2/(2K)}))$, stops with an incorrect answer with
+  probability at most $(x/K)^K e^{K-x}$.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  \uses{prereq:peeled_joint}
+  The GLRT errs only if the evidence against the true model exceeds the threshold at some round,
+  which does not happen at round $0$, where the evidence vanishes. With
+  $\eta = p\log 2/(2K)$, $2K\eta\lfloor\log_2 n\rfloor \le p \log n$, so the thresholds dominate
+  those of \cref{prereq:peeled_joint}.
+\end{proof}
+
+\begin{lemma}
+  \label{prereq:deviational}
+  \lean{LMLExplore.Identification.IdentTask.measureReal_histOutputMeasure_glrt_expFamilyEvidence_log_mul_rpow_div_le,
+    LMLExplore.Identification.IdentTask.isDeltaPAC_glrt_expFamilyEvidence_log_mul_rpow_div}
+  \leanok
+  \uses{prereq:deviational_glrt}
+  For every identification task on vectors of means, arms dominated by exponential families,
+  every sampling rule, $p > 0$, $\delta \in (0, 1]$ and $C \ge \delta e^{c_{p,K} + 2x_\delta}$,
+  where $x_\delta = \log(1/\delta) + 2K(1 + \log(1 + \log(1/\delta)))$ is LMLExplore's level,
+  the GLRT with the threshold $\log(C t^p / \delta)$ is $\delta$-correct
+  \cite[Proposition 12]{GK16}, and it is $\delta$-PAC when it stops almost surely.
+  LMLRoadmaps: Identification 4.2.
+\end{lemma}
+
+\begin{proof}
+  \leanok
+  \uses{prereq:deviational_glrt}
+  For $n \ge 1$, $\log(C n^p/\delta) \ge p \log n + c_{p,K} + 2x_\delta$, and
+  $(x_\delta/K)^K e^{K - x_\delta} \le \delta$ with $x_\delta \ge K$ (LMLExplore).
+\end{proof}
 
 \begin{lemma}
   \label{prereq:bai_continuity}

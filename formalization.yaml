@@ -79,9 +79,17 @@ status:
     almost sure sample complexity of the GLRT for any task, estimator and thresholds
     log(1/δ) + o(t) (ForLMLExplore/Identification/AlmostSure.lean, PAPER_ROADMAP.md R11) and the
     strong law of large numbers for the empirical means of a run
-    (ForLMLExplore/SequentialLearning/SumRewards.lean). Left: Theorem 10 and Proposition 12, and
-    Theorem 5 once its statement is corrected.
-  sorry_count: 3
+    (ForLMLExplore/SequentialLearning/SumRewards.lean).
+    Phase 2, round of 2026-11-08 (the deviational threshold): Proposition 12 is proved, for every
+    exponent p > 0, with the constant C = δ exp(c_{p,K} + 2 x_δ), from the GLRT error bound for any
+    task on vectors of means and arms dominated by any exponential families
+    (ForLMLExplore/Identification/DeviationalThreshold.lean, PAPER_ROADMAP.md R10). It rests on a
+    peeling of the numbers of pulls of each arm over dyadic slices in LML's reward stream model
+    (ForLMLExplore/SequentialLearning/RateFunctionDeviation.lean), from the exponential
+    supermartingale bound for i.i.d. sums (ForLMLExplore/Probability/Martingale/RateFunction.lean).
+    Left: Theorem 10, and Theorem 5, unblocked by the decision of 2026-11-08 that it assumes a
+    second arm.
+  sorry_count: 2
   sorry_in_definitions: 0
 
 alignment:
@@ -137,10 +145,13 @@ alignment:
     - source: "prop:deviational — Proposition 12, deviational threshold"
       lean: "Garivier2016Optimal.exists_measureReal_glrt_expFamilyEvidence_le"
       module: "Garivier2016Optimal.GK2016.Proposition12"
-      status: "stated"
+      status: "proved"
       relation: "narrowMatch"
       erratum: "E2"
-      note: "With C depending on δ; the paper's C(α, K), independent of δ, does not exist."
+      note: >-
+        With C depending on δ; the paper's C(α, K), independent of δ, does not exist. The proof
+        gives C = δ exp(c_{p,K} + 2 x_δ) and uses only p > 0, not p > 1; the hypothesis that id is
+        not ρ-almost everywhere constant is unused.
     - source: "prop:as — Proposition 13, almost sure upper bound"
       lean: "Garivier2016Optimal.stoppingTime_glrt_ne_top_and_limsup_le"
       module: "Garivier2016Optimal.GK2016.Proposition13"

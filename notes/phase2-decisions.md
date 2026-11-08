@@ -207,3 +207,64 @@ Decisions taken in the unattended rounds of `scripts/formalize.sh`, by date.
   `Classical.choice` and `Quot.sound`), `leanblueprint pdf`, `leanblueprint web` and
   `lake exe checkdecls blueprint/lean_decls`. No definition in the closure of a headline
   statement changed, so `lake build Comparator` was not needed.
+
+## 2026-11-08: the deviational threshold (Proposition 12)
+
+- **Job and area.** Advance. Tag, Refresh and Refactor pull request did not apply: LMLRoadmaps
+  `main` is still `d01bdd6b89ce`, and the paper's only pull request, LMLExplore#242 (R14), is
+  open with status `PR #242`. Of the results left, Proposition 12 (R10) and Theorem 10 (R9) each
+  need a new deviation inequality. Proposition 12 is the smaller one: LMLExplore already has the
+  exponential supermartingales, the self-normalized peeling bounds of [GC11, Theorem 10] and
+  [LS, Proposition 33.9]. Theorem 10 needs the Krichevsky–Trofimov mixture bound and a change of
+  measure to a Bayesian model, which nothing in LMLExplore provides yet. Theorem 5, unblocked by
+  the user's decision of 2026-11-08 (commit `5e45b20`, during this round), is left for a later
+  round.
+- **Route.** The paper's proof (Appendix C) uses the deviation bound of [Combes14Lip, Theorem 2]
+  for the sum over all the arms, which LMLExplore does not have. The corrected statement lets `C`
+  depend on `δ`, so a bound of the form `P(∃ t, β(t) < Z(t)) ≤ f(x)` with `f(x) → 0` and
+  thresholds `p log t + c + 2 x` suffices. Per arm, the numbers of rewards are peeled over the
+  dyadic slices `2 ^ k ≤ s < 2 ^ (k + 1)`. On each slice LMLExplore's time-uniform Chernoff bound
+  with the rate function gives `2 exp (-z / 2)`, applied to the i.i.d. stream of the arm with the
+  filtration of its past rewards. With levels `2 (η k + κ_η + y)` the slices sum to `exp (-y)`.
+  Then [LS, Proposition 33.9] combines the arms, which are independent in the stream model, with
+  the monotone function `η log₂ s + κ_η`, and LMLExplore's joint transfer brings the bound to runs.
+  LMLExplore's union-bound thresholds `K log (2 t (t + 1)) + x` grow like `2 K log t`, which is
+  why they do not give `log (C t ^ p / δ)` for `p < 2 K`. The peeled ones grow like `p log t`
+  for any `p > 0`.
+- **Generality.** The thresholds hold for every task on vectors of means, for arms dominated by
+  any exponential families (each arm with its own family), for every sampling rule and for every
+  `p > 0`, with the explicit `C = δ exp (c_{p,K} + 2 x_δ)`, `c_{p,K} =
+  2 K log (2 / (1 - exp (-(p log 2 / (2 K)))))` and LMLExplore's level `x_δ`. Identification 4.2
+  asks for an explicit `C(α, K)` independent of `δ` (see E2), and these thresholds are of order
+  `2 log (1 / δ)`, a factor 2 from the ratio of the peeling. A ratio `c > 1` in place of `2` would
+  give a factor `c`. The KK21 thresholds of the same layer, `log (1 / δ) + O(log log)`, are the
+  sharp form and remain to be done. The intermediate statements keep the general `η`
+  (`IdentTask.measure_exists_lt_expFamilyEvidence_le_of_le`), so that other threshold shapes can
+  reuse them. The i.i.d. slice bounds are stated for any i.i.d. sequence on a standard Borel
+  space, as dot-notation lemmas on `iIndepFun`. LML's stream space `ℕ → α → ℝ` is standard Borel
+  when `α` is countable.
+- **The frozen statement.** It has `1 < p`, of which only `0 < p` is used, and the hypothesis that
+  `id` is not `ρ`-almost everywhere constant, which is unused (the docstring says so). Its imports
+  changed, so a scratch file elaborated the challenge's statement next to the solution. The types
+  are the same `Expr`, with the same universe names, and the axioms are `propext`,
+  `Classical.choice` and `Quot.sound`.
+- **E2.** The erratum says that no `C(α, K)` works. The proof here does not settle that: it gives
+  a `C` that grows with `1 / δ`. A heuristic supports the erratum's claim. Boundary crossing
+  asymptotics of a centred random walk across `√(2 t (L + α log t))` give a probability of order
+  `√L e^{-L}`, which is more than `δ` for `L = log (1 / δ) + O(1)` and small `δ`. The library
+  docstring only says that the paper's proof does not give a constant independent of `δ`. The
+  erratum's **Lean** entry now records the constant that the proof gives.
+- **Placement, and `theorem` or `lemma`.** The four new files are R10's and sit at the paths of the LMLExplore
+  files they extend: `Probability/Martingale/RateFunction.lean`,
+  `SequentialLearning/RateFunctionDeviation.lean`, `SequentialLearning/ExpFamilyDeviation.lean`,
+  and `Identification/DeviationalThreshold.lean`, whose content would go to LMLExplore's
+  `Identification/ExpFamilyThreshold.lean`. LMLExplore's private lemma
+  `streamMeasure_exists_mul_rateFunction_eq_top` is restated privately in the copy of
+  `RateFunctionDeviation.lean`. Only the two library forms of Proposition 12 are `theorem`s, and
+  the intermediate results are `lemma`s, following the skill's rule rather than LMLExplore's habit
+  of `theorem` for main results.
+- **Checks.** `scripts/check-build.sh` (2 declarations use `sorry`, Theorems 5 and 10, no other
+  warning), `lake exe runLinter Garivier2016Optimal`, `scripts/check-forlmlexplore.sh`,
+  `python3 scripts/check-blueprint.py`, `leanblueprint pdf`, `leanblueprint web` and
+  `lake exe checkdecls blueprint/lean_decls`. No definition in the closure of a headline
+  statement changed, so `lake build Comparator` was not needed.
