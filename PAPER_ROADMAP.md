@@ -16,10 +16,10 @@ Paper: RemyDegenne/Garivier2016Optimal · LMLExplore 5113b88ad95f · LMLRoadmaps
 | R8 | C-tracking and D-tracking guarantees [GK16, Lemmas 7, 8, 15, 17, Proposition 9] | exists | `LMLExplore.Identification.CTracking.tendsto_pullCount_div` | – | |
 | R9 | The Krichevsky–Trofimov mixture and the informational threshold for Bernoulli arms [GK16, Lemma 11, Theorem 10] | target | Identification 4.2 | todo | `ForLMLExplore/Identification/KTThreshold.lean` |
 | R10 | The deviational thresholds `log(C t^α/δ)` [GK16, Proposition 12] | target | Identification 4.2 | proved | `ForLMLExplore/Identification/DeviationalThreshold.lean`, `ForLMLExplore/SequentialLearning/ExpFamilyDeviation.lean`, `ForLMLExplore/SequentialLearning/RateFunctionDeviation.lean`, `ForLMLExplore/Probability/Martingale/RateFunction.lean` |
-| R11 | The almost sure sample complexity bound of the GLRT [GK16, Proposition 13] | target | Identification 4.4 | proved | `ForLMLExplore/Identification/AlmostSure.lean`, `ForLMLExplore/SequentialLearning/SumRewards.lean` |
+| R11 | The almost sure sample complexity bound of the GLRT [GK16, Proposition 13] | target | Identification 4.4 | PR #246 | `ForLMLExplore/Identification/AlmostSure.lean`, `ForLMLExplore/SequentialLearning/SumRewards.lean` |
 | R12 | Expected sample complexity of Track-and-Stop [GK16, Theorem 14, Lemmas 19, 20] | exists | `LMLExplore.Identification.IdentTask.eventually_expectedStoppingTime_trackAndStop_le_of_charTime_lt` | – | |
 | R13 | The paper's statements, specializing the items above to its setting | paper | | todo | `GK2016/Basic.lean`, `GK2016/Theorem1.lean`, `GK2016/Theorem5.lean`, `GK2016/Proposition6.lean`, `GK2016/Theorem10.lean`, `GK2016/Proposition12.lean`, `GK2016/Proposition13.lean`, `GK2016/Theorem14.lean` |
-| R14 | Continuity of the cost of the alternatives of best arm identification near a model, and openness of its answer sets, for arms in an exponential family | refactor | `LMLExplore.Identification.continuousWithinAt_altCost_baiTask_restrict` | PR #242 | `ForLMLExplore/Identification/Task/BestArm.lean` |
+| R14 | Continuity of the cost of the alternatives of best arm identification near a model, and openness of its answer sets, for arms in an exponential family | refactor | `LMLExplore.Identification.continuousWithinAt_altCost_baiTask_restrict` | merged #242 | `ForLMLExplore/Identification/Task/BestArm.lean` |
 
 ## Notes
 
@@ -99,6 +99,7 @@ Paper: RemyDegenne/Garivier2016Optimal · LMLExplore 5113b88ad95f · LMLRoadmaps
   prerequisite that turns proportions bounded away from zero into the almost sure convergence of
   the empirical means; it goes to LMLExplore's `SequentialLearning/SumRewards.lean`.
   Identification 5.2 asks for the almost sure version of Track-and-Stop's optimality through it.
+  Ported as LMLExplore#246, opened 2026-11-08.
 - R12: LMLExplore proves `𝔼[τ_δ] ≤ c log(1/δ)` for every `c > T*(μ)`, stronger than the paper's
   `α T*(μ)`; the C-tracking form is
   `LMLExplore.Identification.IdentTask.eventually_expectedStoppingTime_cTrackAndStop_le_of_charTime_lt`.
@@ -108,7 +109,8 @@ Paper: RemyDegenne/Garivier2016Optimal · LMLExplore 5113b88ad95f · LMLRoadmaps
   public, in place, and adds `isOpen_answerSet_baiTask_restrict` next to `isOpen_answerSet_baiTask`:
   for an open set `S` of vectors of means, the models of the task restricted to `S` with unique
   best arm `a` form an open set, which gives the recommendation of `a` near `μ` that the same
-  bounds assume.
+  bounds assume. Merged on 2026-11-08 as LMLExplore#242 (71936e449f5d), after the pin: the bump
+  deletes the local copy in `ForLMLExplore/Identification/Task/BestArm.lean`.
 
 ## Proposed targets
 

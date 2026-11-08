@@ -321,3 +321,16 @@ Decisions taken in the unattended rounds of `scripts/formalize.sh`, by date.
   `python3 scripts/check-blueprint.py`, `leanblueprint pdf`, `leanblueprint web` and
   `lake exe checkdecls blueprint/lean_decls`. No definition in the closure of a headline
   statement changed, so `lake build Comparator` was not needed.
+
+## 2026-11-08: refresh of the paper roadmap
+
+- **Job.** Refresh. Tag did not apply. LMLRoadmaps `main` is still `d01bdd6b89ce`, so no target
+  moved and no `staged` item gained a target. The paper's pull requests to LMLExplore changed:
+  LMLExplore#242 (R14) was merged on 2026-11-08 (merge commit `71936e449f5d`), and LMLExplore#246,
+  the port of R11 (its `Item: R11` line), was opened.
+- **Statuses.** R14 is `merged #242`, R11 is `PR #246`. R14 keeps its tag `refactor` until the
+  bump, which moves the pin past the merge, deletes the local copy in
+  `ForLMLExplore/Identification/Task/BestArm.lean`, and retags it `exists`. The header is
+  unchanged: the LMLExplore pin is still `5113b88ad95f`, and LMLRoadmaps `main` the commit it
+  names.
+- **Checks.** No Lean, blueprint or statement changed in this round, so none was run.
