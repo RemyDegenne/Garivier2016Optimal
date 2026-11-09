@@ -107,6 +107,25 @@ status:
   sorry_count: 0
   sorry_in_definitions: 0
 
+automation:
+  methods:
+    - method: "agent"
+      models: ["claude-opus-5-5"]
+      framework: "Claude Code"
+      tool_setup: >-
+        The formalize-paper skill of the lml plugin
+        (https://github.com/LeanMachineLearning/lml-claude) on lml-paper-template: phase 1 with a
+        human (blueprint, headline statements, comparator challenges), then the unattended rounds
+        of scripts/formalize.sh; Tau Ceti workers port the library-shaped results to LMLExplore.
+
+review:
+  status: "agent-reviewed"
+  reviewers: []
+  notes: >-
+    An AI agent (Claude Code) checked the headline statements against the paper, in the
+    phase-1 statement check of 2026-11-08; no human has reviewed them yet. Comparator verifies
+    that the project proves exactly them (11 challenges, all verified on 2026-11-08).
+
 alignment:
   namespace: "Garivier2016Optimal"
   note: >-
