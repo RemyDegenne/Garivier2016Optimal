@@ -9,7 +9,8 @@ and [Mathlib](https://github.com/leanprover-community/mathlib4). Made from
 
 - Website: https://RemyDegenne.github.io/Garivier2016Optimal/, with the blueprint, the referee site
   and the literature links (which declarations formalize which results of the paper). CI builds it
-  on each push to `main`; the literature links are only there, not in the repository.
+  on each push to `main`. The literature links are also in `literature/annotations.jsonl`, which
+  `scripts/formalize.sh` commits when the paper is formalized and after the final bump.
 - The paper: `source/arXiv-1602.04589v2/`; the outline of the formalization: `notes/blueprint-outline.md`. Errors found in it, with their corrections: `notes/paper-errata.md`.
 - The paper's results: `Garivier2016Optimal/GK2016/`, one file per result, listed with their status in
   `formalization.yaml`, and `GK2016/Basic.lean`, the lemmas that meet the paper's setting with
